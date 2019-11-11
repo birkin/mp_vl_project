@@ -14,9 +14,14 @@ from django.shortcuts import get_object_or_404, render
 log = logging.getLogger(__name__)
 
 
-# def dummy_url_handler( request ):
-#     """ Docstring. """
-#     pass
+def info( request ):
+    """ Displays home page. """
+    data = {}
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(data, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
+    else:
+        resp = render( request, 'mp_vl_app_templates/home.html', data )
+    return resp
 
 
 # ===========================
