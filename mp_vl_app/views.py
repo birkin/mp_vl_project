@@ -2,7 +2,7 @@
 
 import datetime, json, logging, os, pprint
 from . import settings_app
-from mp_vl_app.lib import view_info_helper
+from mp_vl_app.lib import views_version_helper
 # from mp_vl_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout
@@ -33,12 +33,12 @@ def version( request ):
     """ Returns basic data including branch & commit. """
     # log.debug( 'request.__dict__, ```%s```' % pprint.pformat(request.__dict__) )
     rq_now = datetime.datetime.now()
-    commit = view_info_helper.get_commit()
-    branch = view_info_helper.get_branch()
+    commit = views_version_helper.get_commit()
+    branch = views_version_helper.get_branch()
     info_txt = commit.replace( 'commit', branch )
     resp_now = datetime.datetime.now()
     taken = resp_now - rq_now
-    context_dct = view_info_helper.make_context( request, rq_now, info_txt, taken )
+    context_dct = views_version_helper.make_context( request, rq_now, info_txt, taken )
     output = json.dumps( context_dct, sort_keys=True, indent=2 )
     return HttpResponse( output, content_type='application/json; charset=utf-8' )
 
