@@ -126,7 +126,7 @@ STATIC_ROOT = os.environ['MV_DJ__STATIC_ROOT']  # needed for collectstatic comma
 
 
 # Email
-SERVER_EMAIL = os.environ['MV_DJ__SERVER_EMAIL']
+SERVER_EMAIL = os.environ['MV_DJ__SERVER_EMAIL']  # sender
 EMAIL_HOST = os.environ['MV_DJ__EMAIL_HOST']
 EMAIL_PORT = int( os.environ['MV_DJ__EMAIL_PORT'] )
 
