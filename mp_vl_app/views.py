@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, logging, os, pprint
-from . import settings_app
+from mp_vl_app import settings_app
 from mp_vl_app.lib import views_version_helper, views_info_helper
-# from mp_vl_app.lib.shib_auth import shib_login  # decorator
+from mp_vl_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
