@@ -17,8 +17,10 @@ def build_data( user,  ):
     if user.is_authenticated:
         username = user.first_name
         context['logout_url'] = reverse( 'logout_url' )
+        context['logged_in'] = True
     else:
         context['login_url'] = reverse( 'login_url' )
+        context['logged_in'] = False
     context['username'] = username
     log.debug( f'context, ```{pprint.pformat(context)}```' )
     return context

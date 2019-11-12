@@ -912,7 +912,12 @@
                 <h1 class="MuiTypography-root jss1 MuiTypography-h1 MuiTypography-noWrap">
                     <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss2 MuiTypography-colorInherit" href="/">Mapping Violence</a>
                 </h1>
-                <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit" href="/">Database</a><a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit">Logout</a>
+                {% if logged_in %}
+                <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit" href="/">Database</a>
+                <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit">Logout</a>
+                {% else %}
+                <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit" href="{{ login_url }}">Login</a>
+                {% endif %}
             </div>
         </header>
     </div>  <!-- end div id="root" -->
