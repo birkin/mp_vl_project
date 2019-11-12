@@ -16,12 +16,20 @@ log = logging.getLogger(__name__)
 
 def info( request ):
     """ Displays home page. """
-    data = views_info_helper.build_data( request )
+    data = views_info_helper.build_data( request.user )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(data, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
         resp = render( request, 'mp_vl_app_templates/home.html', data )
     return resp
+
+
+def login( request ):
+    return HttpResponse( 'login coming' )
+
+
+def logout( request ):
+    return HttpResponse( 'logout coming' )
 
 
 # ===========================

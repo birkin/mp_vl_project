@@ -1,18 +1,27 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, os
+import datetime, json, logging, os, pprint
 from mp_vl_app import settings_app
 from django.conf import settings
-# from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse
 
 
 log = logging.getLogger(__name__)
 
 
-def build_data( request ):
+def build_data( user,  ):
     """ Builds and returns data-dct.
         Called by views.info()"""
-    return {}
+    context = {}
+    username = None
+    if user.is_authenticated:
+        username = user.first_name
+        context['logout_url'] = reverse( 'logout_url' )
+    else:
+        context['login_url'] = reverse( 'login_url' )
+    context['username'] = username
+    log.debug( f'context, ```{pprint.pformat(context)}```' )
+    return context
 
 
 # def make_context( request, rq_now, info_txt, taken ):
