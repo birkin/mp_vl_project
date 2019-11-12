@@ -24,8 +24,23 @@ def info( request ):
     return resp
 
 
+@shib_login
+def db_list( request ):
+    """ Displays db-listing-summary. """
+    return HttpResponse( 'db-listing-summary coming' )
+
+
+@shib_login
 def login( request ):
+    """ Handles authNZ, & redirects to admin.
+        Called by click on login or admin link. """
     return HttpResponse( 'login coming' )
+    next_url = request.GET.get( 'next', None )
+    if not next_url:
+        redirect_url = reverse( 'db_list_url' )
+    else:
+        redirect_url = request.GET['next']  # will often be same page
+    return HttpResponseRedirect( redirect_url )
 
 
 def logout( request ):

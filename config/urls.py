@@ -12,7 +12,8 @@ admin.autodiscover()
 urlpatterns = [
 
     ## primary app urls...
-    url( r'^info/$', views.info, name='info_url' ),
+    url( r'^info/$', views.info, name='info_url' ),  # home page
+    url( r'^db_list/$', views.db_list, name='db_list_url' ),  # behind shib
     url( r'^admin/', admin.site.urls ),  # eg host/project_x/admin/
     # url( r'^admin/login/', RedirectView.as_view(pattern_name='login_url') ),
     # url( r'^login/$', views.login, name='login_url' ),
