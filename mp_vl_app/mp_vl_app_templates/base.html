@@ -10,7 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
 
     <meta charset="utf-8">
-    <link rel="shortcut icon" href="/favicon.ico">
+    <!-- <link rel="shortcut icon" href="/favicon.ico"> -->
+    <link rel="shortcut icon" href="{% static 'images/mv_favicon.ico' type='image/x-icon' %}">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="#000000">
     <link rel="manifest" href="/manifest.json">
@@ -898,6 +899,9 @@
         })()
     </script>
 
+    {% block page_css %}
+    {% endblock page_css %}
+
 </head>
 
 <body>
@@ -913,14 +917,17 @@
                     <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss2 MuiTypography-colorInherit" href="/">Mapping Violence</a>
                 </h1>
                 {% if logged_in %}
-                <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit" href="/">Database</a>
-                <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit">Logout</a>
+                <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit" href="{% url 'db_list_url' %}">Database</a>
+                <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit" href="{% url 'logout_url' %}">Logout</a>
                 {% else %}
-                <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit" href="{{ login_url }}">Login</a>
+                <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit" href="{% url 'login_url' %}">Login</a>
                 {% endif %}
             </div>
         </header>
     </div>  <!-- end div id="root" -->
+
+    {% block content %}
+    {% endblock content %}
 
 </body>
 
