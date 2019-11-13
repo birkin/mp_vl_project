@@ -1,13 +1,34 @@
 {% extends "mp_vl_app_templates/base.html" %}
 
+
+{# in <head> #}
+
 {% block page_title %}
 info
 {% endblock page_title %}
 
+{% block page_css %}
+<style type="text/css">
+    p#message {
+        /*all: unset;*/
+        /*all: initial;*/
+        margin-top: 2em;
+        margin-left: 2em;
+        margin-bottom: 2em;
+    }
+</style>
+{% endblock page_css %}
+
+
+{# in <body> #}
 
 {% block content %}
 
-<h1>info (under construction)</h1>
+    {% if logged_in %}
+    <p id="message">Click "Database" to view and edit data.</p>
+    {% else %}
+    <p id="message">Login to view and edit data.</p>
+    {% endif %}
 
 <hr/>
 
