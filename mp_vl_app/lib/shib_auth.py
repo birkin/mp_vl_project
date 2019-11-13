@@ -23,13 +23,21 @@ def shib_login(func):
         Called by views.py decorators. """
     log.debug( 'starting shib_login() decorator' )
     def decorator(request, *args, **kwargs):
-        hlpr = LoginDecoratorHelper()
-        cleaned_meta_dct = hlpr.prep_shib_dct( request.META, request.get_host() )
-        user_obj = hlpr.manage_usr_obj( request, cleaned_meta_dct )
-        if not user_obj:
-            return HttpResponseForbidden( '403 / Forbidden' )
+        log.debug( f'authenticated?, ```{request.user.is_authenticated}```' )
+        if request.user.is_authenticated == False:
+            log.debug( 'will proceed w/shib-check' )
+            hlpr = LoginDecoratorHelper()
+            cleaned_meta_dct = hlpr.prep_shib_dct( request.META, request.get_host() )
+            user_obj = hlpr.manage_usr_obj( request, cleaned_meta_dct )
+            if not user_obj:
+                return HttpResponseForbidden( '403 / Forbidden' )
+        else:
+            log.debug( 'user already logged in; continue' )
+            pass
         return func(request, *args, **kwargs)
+        log.debug( 'we never get here, right?' )
     return decorator
+
 
 
 class LoginDecoratorHelper(object):
@@ -85,8 +93,7 @@ class LoginDecoratorHelper(object):
         try:
             usr, created = User.objects.get_or_create( username=usrnm )
         except Exception as e:
-            msg = 'exception, ```%s```' % e
-            log.debug( msg )
+            log.exception( 'problem getting or creating user' )
             # raise Exception( msg )
         netid = meta_dct['Shibboleth-brownNetId']
         if netid in settings_app.SUPER_USERS:
@@ -97,14 +104,12 @@ class LoginDecoratorHelper(object):
         try:
             usr = self.update_user( usr, meta_dct )
         except Exception as e:
-            msg = 'exception, ```%s```' % e
-            log.debug( msg )
+            log.exception( 'problem updating user' )
             # raise Exception( msg )
         try:
             usr.save()
         except Exception as e:
-            msg = 'exception, ```%s```' % e
-            log.debug( msg )
+            log.exception( 'problem saving user' )
             # raise Exception( msg )
         log.debug( 'user updated and saved' )
         log.debug( 'user-obj, ```%s```' % pprint.pformat(usr.__dict__) )
