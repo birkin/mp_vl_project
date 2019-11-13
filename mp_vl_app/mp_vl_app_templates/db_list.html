@@ -1,0 +1,31 @@
+{% extends "mp_vl_app_templates/base.html" %}
+
+
+{# in <head> #}
+
+{% block page_title %}
+Mapping Violence Database
+{% endblock page_title %}
+
+{% block page_css %}
+<style type="text/css">
+    p#message {
+        /*all: unset;*/
+        /*all: initial;*/
+        margin-top: 2em;
+        margin-left: 2em;
+        margin-bottom: 2em;
+    }
+</style>
+{% endblock page_css %}
+
+
+{# in <body> #}
+
+{% block content %}
+
+<p id="message">Below are all the entries ever created by the Mapping Violence team.</p>
+
+<hr/>
+
+{% endblock content %}

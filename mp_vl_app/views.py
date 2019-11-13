@@ -27,7 +27,13 @@ def info( request ):
 @shib_login
 def db_list( request ):
     """ Displays db-listing-summary. """
-    return HttpResponse( 'db-listing-summary coming' )
+    data = {}
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(data, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
+    else:
+        resp = render( request, 'mp_vl_app_templates/db_list.html', data )
+    return resp
+    # return HttpResponse( 'db-listing-summary coming' )
 
 
 @shib_login
