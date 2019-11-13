@@ -2,7 +2,7 @@
 
 import datetime, json, logging, os, pprint
 from mp_vl_app import settings_app
-from mp_vl_app.lib import views_version_helper, views_info_helper
+from mp_vl_app.lib import views_version_helper, views_info_helper, views_dblist_helper
 from mp_vl_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout
@@ -27,7 +27,7 @@ def info( request ):
 @shib_login
 def db_list( request ):
     """ Displays db-listing-summary. """
-    data = {}
+    data = views_dblist_helper.build_data( request.user )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(data, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
