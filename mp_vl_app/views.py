@@ -5,7 +5,7 @@ from mp_vl_app import settings_app
 from mp_vl_app.lib import views_version_helper, views_info_helper, views_dblist_helper
 from mp_vl_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
-from django.contrib.auth import logout
+from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -49,7 +49,14 @@ def login( request ):
 
 
 def logout( request ):
-    return HttpResponse( 'logout coming' )
+    """ Logs _app_ out; shib logout not yet implemented.
+        Called by click on Logout link in header-bar. """
+    redirect_url = request.GET.get( 'next', None )
+    if not redirect_url:
+        redirect_url = reverse( 'info_url' )
+    django_logout( request )
+    log.debug( 'redirect_url, ```%s```' % redirect_url )
+    return HttpResponseRedirect( redirect_url )
 
 
 # ===========================
