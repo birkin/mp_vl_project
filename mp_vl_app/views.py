@@ -40,7 +40,6 @@ def db_list( request ):
 def login( request ):
     """ Handles authNZ, & redirects to admin.
         Called by click on login or admin link. """
-    return HttpResponse( 'login coming' )
     next_url = request.GET.get( 'next', None )
     if not next_url:
         redirect_url = reverse( 'db_list_url' )
