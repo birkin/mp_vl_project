@@ -918,6 +918,7 @@
                 </h1>
                 {% if logged_in %}
                 <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit" href="{% url 'db_list_url' %}"><span id="db">Database</span></a>
+                <span id="user_welcome" class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit">Welcome {{ username }}</span>
                 <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit" href="{% url 'logout_url' %}">Logout</a>
                 {% else %}
                 <a class="MuiTypography-root MuiLink-root MuiLink-underlineHover jss3 MuiTypography-colorInherit" href="{% url 'login_url' %}">Login</a>
