@@ -25,7 +25,7 @@ def shib_login(func):
     def decorator(request, *args, **kwargs):
         log.debug( f'authenticated?, ```{request.user.is_authenticated}```' )
         if request.user.is_authenticated == False:
-            log.debug( 'will proceed w/shib-check' )
+            log.debug( 'user not logged in; proceed w/shib-check' )
             hlpr = LoginDecoratorHelper()
             cleaned_meta_dct = hlpr.prep_shib_dct( request.META, request.get_host() )
             user_obj = hlpr.manage_usr_obj( request, cleaned_meta_dct )
@@ -35,7 +35,6 @@ def shib_login(func):
             log.debug( 'user already logged in; continue' )
             pass
         return func(request, *args, **kwargs)
-        log.debug( 'we never get here, right?' )
     return decorator
 
 
