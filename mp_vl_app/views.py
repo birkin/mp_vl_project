@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, logging, os, pprint
+
 from mp_vl_app import settings_app
 from mp_vl_app.lib import views_version_helper, views_info_helper, views_dblist_helper
 from mp_vl_app.lib.shib_auth import shib_login  # decorator
@@ -27,7 +28,8 @@ def info( request ):
 @shib_login
 def db_list( request ):
     """ Displays db-listing-summary. """
-    data = views_dblist_helper.build_data( request.user )
+    ( scheme, host ) = ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1') )
+    data = views_dblist_helper.build_data( scheme, host, request.user )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(data, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
@@ -57,6 +59,20 @@ def logout( request ):
     django_logout( request )
     log.debug( 'redirect_url, ```%s```' % redirect_url )
     return HttpResponseRedirect( redirect_url )
+
+
+@shib_login
+def api_entries( request ):
+    """ Returns json for entries.
+        NOTE: for now, we'll grab a json file -- eventually the data will come from a mongo call.
+        Currently used by views.db_list() """
+    log.debug( f'cwd, ```{os.getcwd()}```' )
+    entries_jsn = ''
+    with open( '../TEMP_mp_vl_entries_all.json' ) as f:
+        entries_jsn = f.read()
+    assert len(entries_jsn) > 10
+    assert type(entries_jsn) == str
+    return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
 
 
 # ===========================

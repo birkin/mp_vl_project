@@ -38,7 +38,6 @@ def shib_login(func):
     return decorator
 
 
-
 class LoginDecoratorHelper(object):
     """ Handles login decorator code. """
 
