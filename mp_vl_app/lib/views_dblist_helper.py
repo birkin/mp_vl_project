@@ -14,6 +14,9 @@ log = logging.getLogger(__name__)
 def build_data( scheme, host, user ):
     """ Builds and returns data-dct.
         Called by views.db_list()"""
+    log.debug( f'initial host, `{host}`' )
+    if host[0:9] != '127.0.0.1':  # force localhost api call
+        host = '127.0.0.1'
     api_url = f'{scheme}://{host}{reverse("api_entries_url")}'
     log.debug( f'api_url, ```{api_url}```' )
     r = requests.get( api_url )

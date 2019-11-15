@@ -24,19 +24,23 @@ def shib_login(func):
     log.debug( 'starting shib_login() decorator' )
     def decorator(request, *args, **kwargs):
         log.debug( f'authenticated?, ```{request.user.is_authenticated}```' )
-        # if request.user.is_authenticated == False:
+        # log.debug( f'request.META, ```{pprint.pformat(request.META)}```' )
+        log.debug( f'request.META["PATH_INFO"], `{request.META["PATH_INFO"]}`' )
         host = request.META.get( 'HTTP_HOST', '127.0.0.1' )
         log.debug( f'host, `{host}`' )
-        if (request.user.is_authenticated == False) and (host[0:9] is not '127.0.0.1'):  # internal api calls will be ok
+        if request.user.is_authenticated == True:
+            log.debug( 'user already logged in; skipping authentication' )
+            pass
+        elif ( request.META.get( 'PATH_INFO', 'xxxxx' )[0:5] == '/api/' ) and ( host[0:9] == '127.0.0.1' ):
+            log.debug( 'internal api call; skipping authentication' )
+            pass
+        else:
             log.debug( 'user not logged in; proceed w/shib-check' )
             hlpr = LoginDecoratorHelper()
             cleaned_meta_dct = hlpr.prep_shib_dct( request.META, request.get_host() )
             user_obj = hlpr.manage_usr_obj( request, cleaned_meta_dct )
             if not user_obj:
                 return HttpResponseForbidden( '403 / Forbidden' )
-        else:
-            log.debug( 'user already logged in; continue' )
-            pass
         return func(request, *args, **kwargs)
     return decorator
 
