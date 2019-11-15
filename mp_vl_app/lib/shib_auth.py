@@ -24,7 +24,9 @@ def shib_login(func):
     log.debug( 'starting shib_login() decorator' )
     def decorator(request, *args, **kwargs):
         log.debug( f'authenticated?, ```{request.user.is_authenticated}```' )
-        if request.user.is_authenticated == False:
+        # if request.user.is_authenticated == False:
+        host = request.META.get( 'HTTP_HOST', '127.0.0.1' )
+        if (request.user.is_authenticated == False) and (host[0:9] is not '127.0.0.1'):  # internal api calls will be ok
             log.debug( 'user not logged in; proceed w/shib-check' )
             hlpr = LoginDecoratorHelper()
             cleaned_meta_dct = hlpr.prep_shib_dct( request.META, request.get_host() )
