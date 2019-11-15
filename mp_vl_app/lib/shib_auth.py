@@ -9,6 +9,7 @@
 
 import copy, json, logging, os, pprint
 
+from django.conf import settings as project_settings
 from django.contrib.auth import authenticate, get_backends, login
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponseForbidden
@@ -25,13 +26,13 @@ def shib_login(func):
     def decorator(request, *args, **kwargs):
         log.debug( f'authenticated?, ```{request.user.is_authenticated}```' )
         # log.debug( f'request.META, ```{pprint.pformat(request.META)}```' )
-        log.debug( f'request.META["PATH_INFO"], `{request.META["PATH_INFO"]}`' )
+        # log.debug( f'request.META["PATH_INFO"], `{request.META["PATH_INFO"]}`' )
         host = request.META.get( 'HTTP_HOST', '127.0.0.1' )
         log.debug( f'host, `{host}`' )
         if request.user.is_authenticated == True:
             log.debug( 'user already logged in; skipping authentication' )
             pass
-        elif ( request.META.get( 'PATH_INFO', 'xxxxx' )[0:5] == '/api/' ) and ( host[0:9] == '127.0.0.1' ):
+        elif ( request.META.get( 'PATH_INFO', 'xxxxx' )[0:5] == '/api/' ) and ( host in project_settings.ALLOWED_HOSTS ):
             log.debug( 'internal api call; skipping authentication' )
             pass
         else:
