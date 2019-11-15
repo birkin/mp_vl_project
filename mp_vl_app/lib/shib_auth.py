@@ -56,7 +56,8 @@ class LoginDecoratorHelper(object):
                 new_dct.pop( key )
         if host == '127.0.0.1' or host == '127.0.0.1:8000':
             new_dct = settings_app.TEST_META_DCT
-        log.debug( 'new_dct, ```{}```'.format(pprint.pformat(new_dct)) )
+        # log.debug( 'new_dct, ```{}```'.format(pprint.pformat(new_dct)) )
+        log.debug( f'new_dct, ```{new_dct}```' )
         return new_dct
 
     def manage_usr_obj( self, request, meta_dct ):
@@ -75,7 +76,8 @@ class LoginDecoratorHelper(object):
     def ensure_basics( self, meta_dct ):
         """ Ensures essential elements exist.
             Called by manage_usr_obj() """
-        log.debug( 'meta_dct, ```%s```' % pprint.pformat(meta_dct) )
+        # log.debug( 'meta_dct, ```%s```' % pprint.pformat(meta_dct) )
+        log.debug( f'meta_dct, ```{meta_dct}```' )
         username = meta_dct.get( 'Shibboleth-eppn', None )
         netid = meta_dct.get( 'Shibboleth-brownNetId', None )
         email = meta_dct.get( 'Shibboleth-mail', None )
@@ -85,7 +87,8 @@ class LoginDecoratorHelper(object):
     def update_userobj( self, meta_dct ):
         """ Grabs user object, updates and saves it.
             Called by manage_usr_obj() """
-        log.debug( 'meta_dct, ```%s```' % pprint.pformat(meta_dct) )
+        # log.debug( 'meta_dct, ```%s```' % pprint.pformat(meta_dct) )
+        log.debug( f'meta_dct, ```{meta_dct}```' )
         usrnm = meta_dct['Shibboleth-eppn']
         log.debug( 'usrnm-b, `%s`' % usrnm )
         try:
