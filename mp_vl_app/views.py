@@ -68,7 +68,8 @@ def api_entries( request ):
         Currently used by views.db_list() """
     log.debug( f'cwd, ```{os.getcwd()}```' )
     entries_jsn = ''
-    with open( '../TEMP_mp_vl_entries_all.json' ) as f:
+    temp_entries_path = os.environ['MV__DJ__TEMP_ENTRIES_PATH']
+    with open( temp_entries_path ) as f:
         entries_jsn = f.read()
     assert len(entries_jsn) > 10
     assert type(entries_jsn) == str
