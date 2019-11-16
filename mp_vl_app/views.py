@@ -31,13 +31,12 @@ def db_list( request ):
     """ Displays db-listing-summary. """
     log.debug( '\n\nstarting db_list()' )
     ( scheme, host ) = ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1') )
-    data = views_dblist_helper.build_data( scheme, host, request.user )
+    context = views_dblist_helper.build_data( scheme, host, request.user )
     if request.GET.get('format', '') == 'json':
-        resp = HttpResponse( json.dumps(data, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
-        resp = render( request, 'mp_vl_app_templates/db_list.html', data )
+        resp = render( request, 'mp_vl_app_templates/db_list.html', context )
     return resp
-    # return HttpResponse( 'db-listing-summary coming' )
 
 
 @shib_login
