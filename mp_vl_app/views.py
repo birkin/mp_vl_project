@@ -17,6 +17,7 @@ log = logging.getLogger(__name__)
 
 def info( request ):
     """ Displays home page. """
+    log.debug( '\n\nstarting info()' )
     data = views_info_helper.build_data( request.user )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(data, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
@@ -28,6 +29,7 @@ def info( request ):
 @shib_login
 def db_list( request ):
     """ Displays db-listing-summary. """
+    log.debug( '\n\nstarting db_list()' )
     ( scheme, host ) = ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1') )
     data = views_dblist_helper.build_data( scheme, host, request.user )
     if request.GET.get('format', '') == 'json':
@@ -42,6 +44,7 @@ def db_list( request ):
 def login( request ):
     """ Handles authNZ, & redirects to admin.
         Called by click on login or admin link. """
+    log.debug( '\n\nstarting login()' )
     next_url = request.GET.get( 'next', None )
     if not next_url:
         redirect_url = reverse( 'db_list_url' )
@@ -53,6 +56,7 @@ def login( request ):
 def logout( request ):
     """ Logs _app_ out; shib logout not yet implemented.
         Called by click on Logout link in header-bar. """
+    log.debug( '\n\nstarting logout()' )
     redirect_url = request.GET.get( 'next', None )
     if not redirect_url:
         redirect_url = reverse( 'info_url' )
@@ -66,13 +70,14 @@ def api_entries( request ):
     """ Returns json for entries.
         NOTE: for now, we'll grab a json file -- eventually the data will come from a mongo call.
         Currently used by views.db_list() """
-    log.debug( f'cwd, ```{os.getcwd()}```' )
+    log.debug( '\n\nstarting api_entries()' )
+    # log.debug( f'cwd, ```{os.getcwd()}```' )
     entries_jsn = ''
     temp_entries_path = os.environ['MV__DJ__TEMP_ENTRIES_PATH']
     with open( temp_entries_path ) as f:
         entries_jsn = f.read()
-    assert len(entries_jsn) > 10
-    assert type(entries_jsn) == str
+    assert len(entries_jsn) > 10, len(entries_jsn)
+    assert type(entries_jsn) == str, type(entries_jsn)
     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
 
 

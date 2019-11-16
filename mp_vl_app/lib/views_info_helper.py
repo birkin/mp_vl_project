@@ -14,6 +14,7 @@ def build_data( user,  ):
         Called by views.info()"""
     context = {}
     username = None
+    log.debug( f'user, `{user}`' )
     if user.is_authenticated:
         username = user.first_name
         context['logged_in'] = True

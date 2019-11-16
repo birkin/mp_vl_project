@@ -24,6 +24,10 @@ def shib_login(func):
         Called by views.py decorators. """
     log.debug( 'starting shib_login() decorator' )
     def decorator(request, *args, **kwargs):
+        log.debug( '\n\nstarting shib_login() decorator sub-function' )
+        # log.debug( f'request.META, ```{pprint.pformat(request.META)}```' )
+        log.debug( f'coming from, ```{request.META.get("HTTP_REFERER", "referrer_unknown")}```' )
+        log.debug( f'heading to, ```{request.META["PATH_INFO"]}```' )
         log.debug( f'authenticated?, ```{request.user.is_authenticated}```' )
         # log.debug( f'request.META, ```{pprint.pformat(request.META)}```' )
         # log.debug( f'request.META["PATH_INFO"], `{request.META["PATH_INFO"]}`' )
