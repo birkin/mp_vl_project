@@ -47,8 +47,11 @@ def shib_login(func):
             user_obj = hlpr.manage_usr_obj( request, cleaned_meta_dct )
             if not user_obj:
                 # return HttpResponseForbidden( '403 / Forbidden' )
+                request.session.flush()
                 request.session['problem_message'] = 'You must log-in to be able to use this site.'
-                redirect_url = redirect_url = reverse( 'info_url' )
+                redirect_url = reverse( 'info_url' )
+                log.debug( 'no user_obj, so redirecting back to info page, with `problem_message` in session' )
+                return HttpResponseRedirect( redirect_url )
         return func(request, *args, **kwargs)
     return decorator
 
@@ -80,6 +83,7 @@ class LoginDecoratorHelper(object):
             Called by shib_login() """
         ( username, netid, email ) = self.ensure_basics( meta_dct )
         if not username or not netid or not email:
+            log.debug( 'no username, netid, and email -- so returning' )
             return
         usr = self.update_userobj( meta_dct )
         backend = get_backends()[0]

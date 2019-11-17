@@ -20,14 +20,15 @@ def info( request ):
     log.debug( '\n\nstarting info()' )
     log.debug( f'session, ```{request.session.items()}```' )
     problem_message = None
-    if 'problem_message' in request.session.items():
-        problem_message = rerequest.session['problem_message']
+    if 'problem_message' in request.session.keys():
+        problem_message = request.session['problem_message']
         request.session.flush()
     data = views_info_helper.build_data( request.user, problem_message )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(data, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
         resp = render( request, 'mp_vl_app_templates/home.html', data )
+    log.debug( 'returning resp' )
     return resp
 
 
@@ -41,6 +42,7 @@ def db_list( request ):
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
         resp = render( request, 'mp_vl_app_templates/db_list.html', context )
+    log.debug( 'returning resp' )
     return resp
 
 
@@ -54,6 +56,7 @@ def login( request ):
         redirect_url = reverse( 'db_list_url' )
     else:
         redirect_url = request.GET['next']  # will often be same page
+    log.debug( f'returning redirect response to, ```{redirect_url}```' )
     return HttpResponseRedirect( redirect_url )
 
 
@@ -65,7 +68,7 @@ def logout( request ):
     if not redirect_url:
         redirect_url = reverse( 'info_url' )
     django_logout( request )
-    log.debug( 'redirect_url, ```%s```' % redirect_url )
+    log.debug( f'logout complete; returning redirect response to, ```{redirect_url}```' )
     return HttpResponseRedirect( redirect_url )
 
 
@@ -82,6 +85,7 @@ def api_entries( request ):
         entries_jsn = f.read()
     assert len(entries_jsn) > 10, len(entries_jsn)
     assert type(entries_jsn) == str, type(entries_jsn)
+    log.debug( 'returning entries_jsn response' )
     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
 
 
