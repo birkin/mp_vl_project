@@ -45,7 +45,9 @@ def shib_login(func):
             cleaned_meta_dct = hlpr.prep_shib_dct( request.META, request.get_host() )
             user_obj = hlpr.manage_usr_obj( request, cleaned_meta_dct )
             if not user_obj:
-                return HttpResponseForbidden( '403 / Forbidden' )
+                # return HttpResponseForbidden( '403 / Forbidden' )
+                request.session['problem_message'] = 'You must log-in to be able to use this site.'
+                redirect_url = redirect_url = reverse( 'info_url' )
         return func(request, *args, **kwargs)
     return decorator
 
