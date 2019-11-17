@@ -23,7 +23,7 @@ def build_data( user, problem_message ):
     else:
         context['logged_in'] = False
     context['username'] = username
-    log.debug( f'context, ```{pprint.pformat(context)}```' )
+    log.debug( f'context.keys(), ```{pprint.pformat(context.keys())}```' )
     return context
 
 
