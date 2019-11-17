@@ -16,6 +16,10 @@ info
         margin-left: 2em;
         margin-bottom: 2em;
     }
+    span#problem_message {
+        font-style: red;
+        font-weight: bold;
+    }
 </style>
 {% endblock page_css %}
 
@@ -27,7 +31,12 @@ info
     {% if logged_in %}
     <p id="message">Click "Database" to view and edit data.</p>
     {% else %}
-    <p id="message">Login to view and edit data.</p>
+    <p id="message">
+        Login to view and edit data.
+        {% if problem_message %}
+        -- <span id="problem">{{ problem_message }}</span>
+        {% endif %}
+    </p>
     {% endif %}
 
 <hr/>

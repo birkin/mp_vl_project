@@ -9,11 +9,13 @@ from django.core.urlresolvers import reverse
 log = logging.getLogger(__name__)
 
 
-def build_data( user,  ):
+def build_data( user, problem_message ):
     """ Builds and returns data-dct.
         Called by views.info()"""
     context = {}
     username = None
+    if problem_message:
+        context['problem_message'] = problem_message
     log.debug( f'user, `{user}`' )
     if user.is_authenticated:
         username = user.first_name

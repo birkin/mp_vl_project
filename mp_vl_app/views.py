@@ -18,7 +18,12 @@ log = logging.getLogger(__name__)
 def info( request ):
     """ Displays home page. """
     log.debug( '\n\nstarting info()' )
-    data = views_info_helper.build_data( request.user )
+    log.debug( f'session, ```{request.session.items()}```' )
+    problem_message = None
+    if 'problem_message' in request.session.items():
+        problem_message = rerequest.session['problem_message']
+        request.session.flush()
+    data = views_info_helper.build_data( request.user, problem_message )
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(data, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
