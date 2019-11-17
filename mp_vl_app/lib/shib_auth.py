@@ -13,7 +13,7 @@ from django.conf import settings as project_settings
 from django.contrib.auth import authenticate, get_backends, login
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from mp_vl_app import settings_app
 
 
