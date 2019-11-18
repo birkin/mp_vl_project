@@ -9,12 +9,18 @@ Mapping Violence Database
 
 {% block page_css %}
 <style type="text/css">
+    hr {
+        margin-top: 1em;
+    }
+    h1#page_title {
+        margin-top: 1em;
+    }
     p#message {
         /*all: unset;*/
         /*all: initial;*/
-        margin-top: 2em;
-        margin-left: 2em;
-        margin-bottom: 2em;
+        /*margin-top: 2em;*/
+        /*margin-left: 2em;*/
+        /*margin-bottom: 2em;*/
     }
     span#db {
         /*visibility: hide;*/
@@ -28,75 +34,79 @@ Mapping Violence Database
 
 {% block content %}
 
-<p id="message">Below are all the entries ever created by the Mapping Violence team.</p>
+<div class="MuiContainer-root jss4 MuiContainer-maxWidthLg">
 
-<hr/>
+    <h1 id="page_title">Mapping Violence Database</h1>
 
-<div class="data-pool">
-    <button class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary" tabindex="0" type="button"><span class="MuiButton-label">Create New</span><span class="MuiTouchRipple-root"></span></button>
-    <table class="MuiTable-root">
-        <thead class="MuiTableHead-root table-head">
-            <tr class="MuiTableRow-root table-row MuiTableRow-head">
-                <th class="MuiTableCell-root MuiTableCell-head" scope="col">Title</th>
-                <th class="MuiTableCell-root MuiTableCell-head" scope="col">Date</th>
-                <th class="MuiTableCell-root MuiTableCell-head" scope="col">Description</th>
-            </tr>
-        </thead>
-        <tbody class="MuiTableBody-root table-body">
-            <tr class="MuiTableRow-root table-row MuiTableRow-hover">
-                <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                <div class="table-row-as-link-short-text">
-                    Test
-                </div>
-                <div class="table-row-as-link-full-text">
-                    Test
-                </div>
-                </td>
-                <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                <div class="table-row-as-link-short-text">
-                    Early 2018
-                </div>
-                <div class="table-row-as-link-full-text">
-                    Early 2018
-                </div>
-                </td>
-                <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                <div class="table-row-as-link-short-text">
-                    <em>Data Attribute Not Found</em>
-                </div>
-                <div class="table-row-as-link-full-text">
-                    <em>Data Attribute Not Found</em>
-                </div>
-                </td>
-            </tr>
-            <tr class="MuiTableRow-root table-row MuiTableRow-hover">
-                <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                <div class="table-row-as-link-short-text">
-                    <em>Data Attribute Not Found</em>
-                </div>
-                <div class="table-row-as-link-full-text">
-                    <em>Data Attribute Not Found</em>
-                </div>
-                </td>
-                <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                <div class="table-row-as-link-short-text">
-                    INVALID DATE
-                </div>
-                <div class="table-row-as-link-full-text">
-                    INVALID DATE
-                </div>
-                </td>
-                <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                <div class="table-row-as-link-short-text">
-                    <em>Data Attribute Not Found</em>
-                </div>
-                <div class="table-row-as-link-full-text">
-                    <em>Data Attribute Not Found</em>
-                </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>  <!-- end <div class="data-pool"> -->
+    <p id="message">Below are all the entries ever created by the Mapping Violence team.</p>
+
+    <div class="data-pool">
+        <button class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary" tabindex="0" type="button"><span class="MuiButton-label">Create New</span><span class="MuiTouchRipple-root"></span></button>
+        <hr/>
+        <table class="MuiTable-root">
+            <thead class="MuiTableHead-root table-head">
+                <tr class="MuiTableRow-root table-row MuiTableRow-head">
+                    <th class="MuiTableCell-root MuiTableCell-head" scope="col">Title</th>
+                    <th class="MuiTableCell-root MuiTableCell-head" scope="col">Date</th>
+                    <th class="MuiTableCell-root MuiTableCell-head" scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody class="MuiTableBody-root table-body">
+                <tr class="MuiTableRow-root table-row MuiTableRow-hover">
+                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
+                    <div class="table-row-as-link-short-text">
+                        Test
+                    </div>
+                    <div class="table-row-as-link-full-text">
+                        Test
+                    </div>
+                    </td>
+                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
+                    <div class="table-row-as-link-short-text">
+                        Early 2018
+                    </div>
+                    <div class="table-row-as-link-full-text">
+                        Early 2018
+                    </div>
+                    </td>
+                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
+                    <div class="table-row-as-link-short-text">
+                        <em>Data Attribute Not Found</em>
+                    </div>
+                    <div class="table-row-as-link-full-text">
+                        <em>Data Attribute Not Found</em>
+                    </div>
+                    </td>
+                </tr>
+                <tr class="MuiTableRow-root table-row MuiTableRow-hover">
+                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
+                    <div class="table-row-as-link-short-text">
+                        <em>Data Attribute Not Found</em>
+                    </div>
+                    <div class="table-row-as-link-full-text">
+                        <em>Data Attribute Not Found</em>
+                    </div>
+                    </td>
+                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
+                    <div class="table-row-as-link-short-text">
+                        INVALID DATE
+                    </div>
+                    <div class="table-row-as-link-full-text">
+                        INVALID DATE
+                    </div>
+                    </td>
+                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
+                    <div class="table-row-as-link-short-text">
+                        <em>Data Attribute Not Found</em>
+                    </div>
+                    <div class="table-row-as-link-full-text">
+                        <em>Data Attribute Not Found</em>
+                    </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>  <!-- end <div class="data-pool"> -->
+</div>  <!-- end <div class="MuiContainer-root jss4 MuiContainer-maxWidthLg"> -->
 
 {% endblock content %}
