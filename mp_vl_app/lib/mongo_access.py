@@ -23,4 +23,6 @@ connect_str_2 = f'{connect_str}?authSource={DB_NAME}&authMechanism=SCRAM-SHA-256
 log.debug( f'connect_str, ```{connect_str}```' )
 
 client = MongoClient( connect_str )
-log.debug( f'client, ```{client}```' )
+print( f'client, ```{client}```' )
+
+print( f'client, ```{pprint.pformat(client.__dict__)}```' )
