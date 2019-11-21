@@ -52,6 +52,36 @@ Mapping Violence Database
                 </tr>
             </thead>
             <tbody class="MuiTableBody-root table-body">
+                {% for record in data %}
+                <tr class="MuiTableRow-root table-row MuiTableRow-hover">
+                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
+                    <div class="table-row-as-link-short-text">
+                        {{ record.title }}
+                    </div>
+                    <div class="table-row-as-link-full-text">
+                        {{ record.title }}
+                    </div>
+                    </td>
+                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
+                    <div class="table-row-as-link-short-text">
+                        {{ record.date }}
+                    </div>
+                    <div class="table-row-as-link-full-text">
+                        {{ record.date }}
+                    </div>
+                    </td>
+                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
+                    <div class="table-row-as-link-short-text">
+                        <em>Data Attribute Not Found</em>
+                    </div>
+                    <div class="table-row-as-link-full-text">
+                        <em>Data Attribute Not Found</em>
+                    </div>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                <!--
                 <tr class="MuiTableRow-root table-row MuiTableRow-hover">
                     <td class="MuiTableCell-root table-cell MuiTableCell-body">
                     <div class="table-row-as-link-short-text">
@@ -104,6 +134,7 @@ Mapping Violence Database
                     </div>
                     </td>
                 </tr>
+                -->
             </tbody>
         </table>
     </div>  <!-- end <div class="data-pool"> -->
