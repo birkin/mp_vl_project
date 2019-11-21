@@ -73,14 +73,14 @@ Mapping Violence Database
                     <td class="MuiTableCell-root table-cell MuiTableCell-body">
                     <div class="table-row-as-link-short-text">
                         {% if record.description %}
-                            <em>{{ record.description }}</em>
+                            <em>{{ record.description|truncatewords:15 }}</em>
                         {% else %}
                             <em>Data Attribute Not Found</em>
                         {% endif %}
                     </div>
                     <div class="table-row-as-link-full-text">
                         {% if record.description %}
-                            <em>{{ record.description }}</em>
+                            <em>{{ record.description|truncatewords:15 }}</em>
                         {% else %}
                             <em>Data Attribute Not Found</em>
                         {% endif %}
