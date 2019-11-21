@@ -33,6 +33,8 @@ def build_data( scheme, host, user ):
             if 'modifier' in date_dct.keys():
                 mod_value = date_dct['modifier'].lower()
                 dt_display = f'{dt_display} ({mod_value})'
+        else:
+            dt_display = 'INVALID_DATE'
         record['date_display'] = dt_display
     context = { 'data': updated_data }
     username = None
