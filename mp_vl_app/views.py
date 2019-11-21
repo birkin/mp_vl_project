@@ -80,7 +80,11 @@ def api_entries( request ):
     log.debug( '\n\nstarting api_entries()' )
     # log.debug( f'cwd, ```{os.getcwd()}```' )
     entries_jsn = ''
-    temp_entries_path = os.environ['MV__DJ__TEMP_ENTRIES_PATH']
+    try:
+        temp_entries_path = os.environ['MV_DJ__TEMP_ENTRIES_PATH']
+    except:
+        log.exception( 'problem getting temp_entries_path' )
+    log.debug( f'temp_entries_path, ```{temp_entries_path}```' )
     with open( temp_entries_path ) as f:
         entries_jsn = f.read()
     assert len(entries_jsn) > 10, len(entries_jsn)
