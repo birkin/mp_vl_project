@@ -64,18 +64,26 @@ Mapping Violence Database
                     </td>
                     <td class="MuiTableCell-root table-cell MuiTableCell-body">
                     <div class="table-row-as-link-short-text">
-                        {{ record.date }}
+                        {{ record.date_display }}
                     </div>
                     <div class="table-row-as-link-full-text">
-                        {{ record.date }}
+                        {{ record.date_display }}
                     </div>
                     </td>
                     <td class="MuiTableCell-root table-cell MuiTableCell-body">
                     <div class="table-row-as-link-short-text">
-                        <em>Data Attribute Not Found</em>
+                        {% if record.description %}
+                            <em>{{ record.description }}</em>
+                        {% else %}
+                            <em>Data Attribute Not Found</em>
+                        {% endif %}
                     </div>
                     <div class="table-row-as-link-full-text">
-                        <em>Data Attribute Not Found</em>
+                        {% if record.description %}
+                            <em>{{ record.description }}</em>
+                        {% else %}
+                            <em>Data Attribute Not Found</em>
+                        {% endif %}
                     </div>
                     </td>
                 </tr>
