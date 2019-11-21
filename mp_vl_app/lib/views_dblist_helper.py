@@ -19,7 +19,22 @@ def build_data( scheme, host, user ):
     log.debug( f'api_url, ```{api_url}```' )
     r = requests.get( api_url )
     data = r.json()
-    context = { 'data': data }
+    updated_data = data.copy()
+    for record in updated_data:
+        log.debug( f'record, ```{pprint.pformat(record)}```' )
+        dt_obj, dt_display = None, None
+        try:
+            date_dct = record['date']
+            dt_obj = datetime.date( date_dct['year'], date_dct['month'], date_dct['day'] )
+        except:
+            pass
+        if dt_obj:
+            dt_display = dt_obj.strftime( '%Y %B %d' )
+            if 'modifier' in date_dct.keys():
+                mod_value = date_dct['modifier'].lower()
+                dt_display = f'{dt_display} ({mod_value})'
+        record['date_display'] = dt_display
+    context = { 'data': updated_data }
     username = None
     if user.is_authenticated:
         username = user.first_name
