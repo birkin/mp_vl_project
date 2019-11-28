@@ -113,8 +113,21 @@ def api_entries( request ):
         m_client = pymongo.MongoClient( connect_str )
         m_db = m_client[settings_app.DB_NAME]
         m_collection = m_db[settings_app.DB_ENTRIES]
-        entries_jsn = m_collection.find_one()
-        log.debug( f'entries_jsn, ```{pprint.pformat(entries_jsn)[0:100]}```' )
+        # entries_jsn = m_collection.find_one()
+        entries_q = m_collection.find( {} )
+        entries = []
+        for doc in entries_q:
+            doc_id = doc['_id']  # type(doc_id), `<class 'bson.objectid.ObjectId'>`; not json serializable
+            doc['_id'] = str( doc_id )
+            # log.debug( f'doc_id, `{doc_id}`' )
+            # log.debug( f'type(doc_id), `{type(doc_id)}`' )
+            # # log.debug( f'doc_id.__dict__, `{pprint.pformat(doc_id.__dict__)}`' )  # AttributeError: 'ObjectId' object has no attribute '__dict__'
+            # log.debug( f'str(doc_id), `{str(doc_id)}`' )
+            entries.append( doc )
+            break
+        log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)[0:1000]}```' )
+        entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
+        # log.debug( f'entries_jsn, ```{pprint.pformat(entries_jsn)[0:1000]}```' )
     except:
         log.exception( 'problem accessing mongo' )
         raise Exception( 'nope' )
