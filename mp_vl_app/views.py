@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, os, pprint
+import datetime, json, logging, os, pprint, urllib.parse
+import pymongo
 
 from mp_vl_app import settings_app
 from mp_vl_app.lib import views_version_helper, views_info_helper, views_dblist_helper
@@ -10,6 +11,7 @@ from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+# from pymongo import MongoClient
 
 
 log = logging.getLogger(__name__)
@@ -72,21 +74,51 @@ def logout( request ):
     return HttpResponseRedirect( redirect_url )
 
 
+# @shib_login
+# def api_entries( request ):
+#     """ Returns json for entries.
+#         NOTE: for now, we'll grab a json file -- eventually the data will come from a mongo call.
+#         Currently used by views.db_list() """
+#     log.debug( '\n\nstarting api_entries()' )
+#     # log.debug( f'cwd, ```{os.getcwd()}```' )
+#     entries_jsn = ''
+#     try:
+#         temp_entries_path = os.environ['MV_DJ__TEMP_ENTRIES_PATH']
+#     except:
+#         log.exception( 'problem getting temp_entries_path' )
+#     log.debug( f'temp_entries_path, ```{temp_entries_path}```' )
+#     with open( temp_entries_path ) as f:
+#         entries_jsn = f.read()
+#     assert len(entries_jsn) > 10, len(entries_jsn)
+#     assert type(entries_jsn) == str, type(entries_jsn)
+#     log.debug( 'returning entries_jsn response' )
+#     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
+
+
 @shib_login
 def api_entries( request ):
     """ Returns json for entries.
-        NOTE: for now, we'll grab a json file -- eventually the data will come from a mongo call.
         Currently used by views.db_list() """
     log.debug( '\n\nstarting api_entries()' )
-    # log.debug( f'cwd, ```{os.getcwd()}```' )
-    entries_jsn = ''
+    if project_settings.DEBUG == True and request.META.get('HTTP_HOST', '127.0.0.1')[0:9] == '127.0.0.1':
+        connect_str = f'mongodb://{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
+    else:
+        username = urllib.parse.quote_plus( settings_app.DB_USER )
+        password = urllib.parse.quote_plus( settings_app.DB_PASS )
+        connect_str_init = f'mongodb://{username}:{password}@{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
+        log.debug( f'connect_str_init, ```{connect_str_init}```' )
+        connect_str = f'{connect_str_init}?authSource={settings_app.DB_NAME}'
+    log.debug( f'connect_str, ```{connect_str}```' )
     try:
-        temp_entries_path = os.environ['MV_DJ__TEMP_ENTRIES_PATH']
+        m_client = pymongo.MongoClient( connect_str )
+        m_db = m_client[settings_app.DB_NAME]
+        m_collection = m_db[settings_app.DB_ENTRIES]
+        entries_jsn = m_collection.find_one()
+        log.debug( f'entries_jsn, ```{pprint.pformat(entries_jsn)[0:100]}```' )
     except:
-        log.exception( 'problem getting temp_entries_path' )
-    log.debug( f'temp_entries_path, ```{temp_entries_path}```' )
-    with open( temp_entries_path ) as f:
-        entries_jsn = f.read()
+        log.exception( 'problem accessing mongo' )
+        raise Exception( 'nope' )
+
     assert len(entries_jsn) > 10, len(entries_jsn)
     assert type(entries_jsn) == str, type(entries_jsn)
     log.debug( 'returning entries_jsn response' )
