@@ -12,6 +12,9 @@ def massage_doc_data( doc_dct ):
     if 'metadata' in doc_dct.keys():
         if 'lastEditedAt' in doc_dct['metadata'].keys():
             doc_dct['metadata']['lastEditedAt'] = str( doc_dct['metadata']['lastEditedAt'] )
+        if 'lastEditedBy' in doc_dct['metadata'].keys():
+            if type( doc_dct['metadata']['lastEditedBy'] ) != str:
+                doc_dct['metadata']['lastEditedBy'] = str( doc_dct['metadata']['lastEditedBy'] )
     log.debug( f'updated doc_dct, ```{pprint.pformat(doc_dct)}```' )
     return doc_dct
 

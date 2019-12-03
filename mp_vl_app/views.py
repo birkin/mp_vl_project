@@ -123,20 +123,10 @@ def api_entries( request ):
     try:
         entries = []
         for ( idx, doc ) in enumerate( entries_q ):
-            # doc_id = doc['_id']  # type(doc_id), `<class 'bson.objectid.ObjectId'>`; not json serializable
-            # doc['_id'] = str( doc_id )
-
-            # log.debug( f'doc_id, `{doc_id}`' )
-            # log.debug( f'type(doc_id), `{type(doc_id)}`' )
-            # # log.debug( f'doc_id.__dict__, `{pprint.pformat(doc_id.__dict__)}`' )  # AttributeError: 'ObjectId' object has no attribute '__dict__'
-            # log.debug( f'str(doc_id), `{str(doc_id)}`' )
             doc = entrs_hlpr.massage_doc_data( doc )
-            # doc['_id'] = str( doc['_id'] )
-            # doc['date'] = 'foo'
             entries.append( doc )
-            if idx > 2:
+            if idx > 10:
                 break
-        # log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)[0:1000]}```' )
         log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)}```' )
         entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
         # log.debug( f'entries_jsn, ```{pprint.pformat(entries_jsn)[0:1000]}```' )
