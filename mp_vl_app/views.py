@@ -3,16 +3,15 @@
 import datetime, json, logging, os, pprint, urllib.parse
 import pymongo
 
-from mp_vl_app import settings_app
-from mp_vl_app.lib import views_version_helper, views_info_helper, views_dblist_helper, views_api_entries_helper
-# from mp_vl_app.lib import views_api_entries_helper as entrs_hlpr
-from mp_vl_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-# from pymongo import MongoClient
+from mp_vl_app import settings_app
+from mp_vl_app.lib import mongo_access
+from mp_vl_app.lib import views_version_helper, views_info_helper, views_dblist_helper, views_api_entries_helper
+from mp_vl_app.lib.shib_auth import shib_login  # decorator
 
 
 log = logging.getLogger(__name__)
@@ -80,14 +79,15 @@ def api_entries( request ):
     """ Returns json for entries.
         Currently used by views.db_list() """
     log.debug( '\n\nstarting api_entries()' )
-    if project_settings.DEBUG == True and request.META.get('HTTP_HOST', '127.0.0.1')[0:9] == '127.0.0.1':
-        connect_str = f'mongodb://{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
-    else:
-        username = urllib.parse.quote_plus( settings_app.DB_USER )
-        password = urllib.parse.quote_plus( settings_app.DB_PASS )
-        connect_str_init = f'mongodb://{username}:{password}@{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
-        log.debug( f'connect_str_init, ```{connect_str_init}```' )
-        connect_str = f'{connect_str_init}?authSource={settings_app.DB_NAME}'
+    # if project_settings.DEBUG == True and request.META.get('HTTP_HOST', '127.0.0.1')[0:9] == '127.0.0.1':
+    #     connect_str = f'mongodb://{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
+    # else:
+    #     username = urllib.parse.quote_plus( settings_app.DB_USER )
+    #     password = urllib.parse.quote_plus( settings_app.DB_PASS )
+    #     connect_str_init = f'mongodb://{username}:{password}@{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
+    #     log.debug( f'connect_str_init, ```{connect_str_init}```' )
+    #     connect_str = f'{connect_str_init}?authSource={settings_app.DB_NAME}'
+    connect_str = mongo_access.prep_connect_str( request )
     log.debug( f'connect_str, ```{connect_str}```' )
     try:
         m_client = pymongo.MongoClient( connect_str )

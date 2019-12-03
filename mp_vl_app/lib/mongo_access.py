@@ -1,31 +1,24 @@
 import logging, os, pprint, urllib.parse
+
+from django.conf import settings as project_settings
+from mp_vl_app import settings_app
 from pymongo import MongoClient
 
 
 log = logging.getLogger(__name__)
 
 
-HOST = os.environ['MV_DJ__MONGO_HOST']
-PORT =  os.environ['MV_DJ__MONGO_PORT']
-DB_NAME = os.environ['MV_DJ__MONGO_DATABASE_NAME']
-COLL_NAME = os.environ['MV_DJ__MONGO_COLLECTION_NAME']
-USER =  os.environ['MV_DJ__MONGO_USERNAME']
-PASS =  os.environ['MV_DJ__MONGO_PASSWORD']
-
-
-username = urllib.parse.quote_plus( USER )
-password = urllib.parse.quote_plus( PASS )
-
-connect_str = f'mongodb://{username}:{password}@{HOST}:{PORT}/'
-log.debug( f'connect_str, ```{connect_str}```' )
-
-# connect_str_2 = f'{connect_str}?authSource={DB_NAME}&authMechanism=SCRAM-SHA-256'
-# log.debug( f'connect_str, ```{connect_str}```' )
-
-client = MongoClient( connect_str )
-print( f'client, ```{client}```' )
-
-print( f'client, ```{pprint.pformat(client.__dict__)}```' )
+def prep_connect_str( request ):
+    """ Preps connect string for localdev and servers.
+        Called by views.api_entries() """
+    if project_settings.DEBUG == True and request.META.get('HTTP_HOST', '127.0.0.1')[0:9] == '127.0.0.1':
+        connect_str = f'mongodb://{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
+    else:
+        username = urllib.parse.quote_plus( settings_app.DB_USER )
+        password = urllib.parse.quote_plus( settings_app.DB_PASS )
+        connect_str_init = f'mongodb://{username}:{password}@{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
+        log.debug( f'connect_str_init, ```{connect_str_init}```' )
+        connect_str = f'{connect_str_init}?authSource={settings_app.DB_NAME}'
 
 
 # ----------------------------------
