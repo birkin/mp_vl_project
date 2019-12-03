@@ -5,6 +5,7 @@ import pymongo
 
 from mp_vl_app import settings_app
 from mp_vl_app.lib import views_version_helper, views_info_helper, views_dblist_helper
+from mp_vl_app.lib import views_api_entries_helper as entrs_hlpr
 from mp_vl_app.lib.shib_auth import shib_login  # decorator
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
@@ -115,6 +116,11 @@ def api_entries( request ):
         m_collection = m_db[settings_app.DB_ENTRIES]
         # entries_jsn = m_collection.find_one()
         entries_q = m_collection.find( {} )
+    except:
+        message = 'problem accessing mongo'
+        log.exception( message )
+        raise Exception( message )
+    try:
         entries = []
         for ( idx, doc ) in enumerate( entries_q ):
             # doc_id = doc['_id']  # type(doc_id), `<class 'bson.objectid.ObjectId'>`; not json serializable
@@ -124,16 +130,21 @@ def api_entries( request ):
             # log.debug( f'type(doc_id), `{type(doc_id)}`' )
             # # log.debug( f'doc_id.__dict__, `{pprint.pformat(doc_id.__dict__)}`' )  # AttributeError: 'ObjectId' object has no attribute '__dict__'
             # log.debug( f'str(doc_id), `{str(doc_id)}`' )
+            doc = entrs_hlpr.massage_doc_data( doc )
+            # doc['_id'] = str( doc['_id'] )
+            # doc['date'] = 'foo'
             entries.append( doc )
             if idx > 2:
                 break
-        log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)[0:1000]}```' )
-        # entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
+        # log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)[0:1000]}```' )
+        log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)}```' )
+        entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
         return entries
         # log.debug( f'entries_jsn, ```{pprint.pformat(entries_jsn)[0:1000]}```' )
     except:
-        log.exception( 'problem accessing mongo' )
-        raise Exception( 'nope' )
+        message = 'problem processing mongo data'
+        log.exception( message )
+        raise Exception( message )
 
     assert len(entries_jsn) > 10, len(entries_jsn)
     assert type(entries_jsn) == str, type(entries_jsn)
