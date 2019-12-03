@@ -104,8 +104,8 @@ def api_entries( request ):
         for ( idx, doc ) in enumerate( entries_q ):
             doc = views_api_entries_helper.massage_doc_data( doc )
             entries.append( doc )
-            if idx > 10:
-                break
+            # if idx > 10:
+            #     break
         log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)}```' )
         entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
         # log.debug( f'entries_jsn, ```{pprint.pformat(entries_jsn)[0:1000]}```' )
