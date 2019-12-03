@@ -21,24 +21,24 @@ def massage_doc_data( doc_dct ):
 
 
 def stringify_date( date_dct ):
-    """ Converts given date-fields to str.
+    """ Creates and returns a display-date string from given date-fields.
         Called by massage_doc_data() """
     if not date_dct: return ''
-    date_str = 'INVALID DATE'
+    date_display_str = 'INVALID DATE'
     ( year, month, day, modifier, year_as_bool, month_as_bool, day_as_bool, modifier_as_bool ) = initialize_date_data( date_dct )
     if ( year_as_bool and month and modifier_as_bool and day ):
-        date_str = f'{year} {month} {day} ({modifier})'
+        date_display_str = f'{year} {month} {day} ({modifier})'
     elif ( year_as_bool and month_as_bool and day_as_bool and not modifier_as_bool ):
-        date_str = f'{year} {month} {day}'
+        date_display_str = f'{year} {month} {day}'
     elif ( year_as_bool and modifier_as_bool and month_as_bool and not day_as_bool ):
-        date_str = f'{year} {month} ({modifier})'
+        date_display_str = f'{year} {month} ({modifier})'
     elif ( year_as_bool and not modifier_as_bool and month_as_bool and not day_as_bool ):
-        date_str = f'{year} {month}'
+        date_display_str = f'{year} {month}'
     elif ( year_as_bool and modifier_as_bool and not month_as_bool and not day_as_bool ):
-        date_str = f'{modifier} {year}'
+        date_display_str = f'{modifier} {year}'
     elif ( year_as_bool and not modifier_as_bool and not month_as_bool and not day_as_bool ):
-        date_str = f'{year}'
-    return date_str
+        date_display_str = f'{year}'
+    return date_display_str
 
 
 def initialize_date_data( date_dct ):
