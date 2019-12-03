@@ -139,7 +139,6 @@ def api_entries( request ):
         # log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)[0:1000]}```' )
         log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)}```' )
         entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
-        return entries
         # log.debug( f'entries_jsn, ```{pprint.pformat(entries_jsn)[0:1000]}```' )
     except:
         message = 'problem processing mongo data'
