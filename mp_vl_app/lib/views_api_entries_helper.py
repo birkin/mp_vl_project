@@ -4,12 +4,31 @@ import logging, pprint
 log = logging.getLogger(__name__)
 
 
+# def massage_doc_data( doc_dct ):
+#     """ Updates doc data so it can be jsonized.
+#         Called by views.api_entries() """
+#     log.debug( f'initial doc_dct, ```{pprint.pformat(doc_dct)}```' )
+#     doc_dct['_id'] = str( doc_dct['_id'] )
+#     doc_dct['date_display'] = stringify_date( doc_dct['date'] )
+#     if 'metadata' in doc_dct.keys():
+#         if 'lastEditedAt' in doc_dct['metadata'].keys():
+#             doc_dct['metadata']['lastEditedAt'] = str( doc_dct['metadata']['lastEditedAt'] )
+#         if 'lastEditedBy' in doc_dct['metadata'].keys():
+#             if type( doc_dct['metadata']['lastEditedBy'] ) != str:
+#                 doc_dct['metadata']['lastEditedBy'] = str( doc_dct['metadata']['lastEditedBy'] )
+#     log.debug( f'updated doc_dct, ```{pprint.pformat(doc_dct)}```' )
+#     return doc_dct
+
+
 def massage_doc_data( doc_dct ):
     """ Updates doc data so it can be jsonized.
         Called by views.api_entries() """
     log.debug( f'initial doc_dct, ```{pprint.pformat(doc_dct)}```' )
     doc_dct['_id'] = str( doc_dct['_id'] )
-    doc_dct['date_display'] = stringify_date( doc_dct['date'] )
+    if doc_dct.get( 'date', None ):
+        doc_dct['date_display'] = stringify_date( doc_dct['date'] )
+    else:
+        doc_dct['date_display'] = '(no date info)'
     if 'metadata' in doc_dct.keys():
         if 'lastEditedAt' in doc_dct['metadata'].keys():
             doc_dct['metadata']['lastEditedAt'] = str( doc_dct['metadata']['lastEditedAt'] )
@@ -23,7 +42,6 @@ def massage_doc_data( doc_dct ):
 def stringify_date( date_dct ):
     """ Creates and returns a display-date string from given date-fields.
         Called by massage_doc_data() """
-    if not date_dct: return ''
     date_display_str = 'INVALID DATE'
     ( year, month, day, modifier, year_as_bool, month_as_bool, day_as_bool, modifier_as_bool ) = initialize_date_data( date_dct )
     if ( year_as_bool and month and modifier_as_bool and day ):
