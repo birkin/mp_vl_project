@@ -19,6 +19,8 @@ def prep_connect_str( request ):
         connect_str_init = f'mongodb://{username}:{password}@{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
         log.debug( f'connect_str_init, ```{connect_str_init}```' )
         connect_str = f'{connect_str_init}?authSource={settings_app.DB_NAME}'
+    log.debug( f'prepared connect_str, ```{connect_str}```' )
+    return connect_str
 
 
 # ----------------------------------
@@ -31,7 +33,7 @@ def prep_connect_str( request ):
 # M_HOST = os.environ['MV_DJ__MONGO_HOST']
 # M_PORT = os.environ['MV_DJ__MONGO_PORT']
 # M_DB = os.environ['MV_DJ__MONGO_DATABASE_NAME']
-# M_COLL = os.environ['MV_DJ__MONGO_COLLECTION_NAME']
+# M_COLL = os.environ['MV_DJ__MONGO_ENTRIES_COLLECTION_NAME']
 # M_USER =  os.environ['MV_DJ__MONGO_USERNAME']
 # M_PASS =  os.environ['MV_DJ__MONGO_PASSWORD']
 
@@ -63,7 +65,7 @@ def prep_connect_str( request ):
 # M_HOST = os.environ['MV_DJ__MONGO_HOST']
 # M_PORT = os.environ['MV_DJ__MONGO_PORT']
 # M_DB = os.environ['MV_DJ__MONGO_DATABASE_NAME']
-# M_COLL = os.environ['MV_DJ__MONGO_COLLECTION_NAME']
+# M_COLL = os.environ['MV_DJ__MONGO_ENTRIES_COLLECTION_NAME']
 
 # connect_str = f'mongodb://{M_HOST}:{M_PORT}/'
 
