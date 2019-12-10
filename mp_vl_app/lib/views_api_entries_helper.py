@@ -1,28 +1,31 @@
-import logging, pprint
+import json, logging, pprint
 
 
 log = logging.getLogger(__name__)
 
 
-# def massage_doc_data( doc_dct ):
-#     """ Updates doc data so it can be jsonized.
-#         Called by views.api_entries() """
-#     log.debug( f'initial doc_dct, ```{pprint.pformat(doc_dct)}```' )
-#     doc_dct['_id'] = str( doc_dct['_id'] )
-#     doc_dct['date_display'] = stringify_date( doc_dct['date'] )
-#     if 'metadata' in doc_dct.keys():
-#         if 'lastEditedAt' in doc_dct['metadata'].keys():
-#             doc_dct['metadata']['lastEditedAt'] = str( doc_dct['metadata']['lastEditedAt'] )
-#         if 'lastEditedBy' in doc_dct['metadata'].keys():
-#             if type( doc_dct['metadata']['lastEditedBy'] ) != str:
-#                 doc_dct['metadata']['lastEditedBy'] = str( doc_dct['metadata']['lastEditedBy'] )
-#     log.debug( f'updated doc_dct, ```{pprint.pformat(doc_dct)}```' )
-#     return doc_dct
+def massage_docs( mongo_docs ):
+    """ Converts doc-objects into json for response.
+        Called by views.api_entries() """
+    entries_jsn = '{}'
+    try:
+        entries = []
+        for ( idx, doc ) in enumerate( mongo_docs ):
+            doc = massage_doc_data( doc )
+            entries.append( doc )
+        log.debug( f'entries-type, `{type(entries)}`' )
+        log.debug( f'entries (first 10), ```{pprint.pformat(entries[0:10])}```' )
+        entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
+    except:
+        message = 'problem processing mongo data'
+        log.exception( message )
+        pass
+    return entries_jsn
 
 
 def massage_doc_data( doc_dct ):
     """ Updates doc data so it can be jsonized.
-        Called by views.api_entries() """
+        Called by massage_docs() """
     log.debug( f'initial doc_dct, ```{pprint.pformat(doc_dct)}```' )
     doc_dct['_id'] = str( doc_dct['_id'] )
     if doc_dct.get( 'date', None ):

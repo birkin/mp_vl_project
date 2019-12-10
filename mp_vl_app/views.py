@@ -80,21 +80,9 @@ def api_entries( request ):
         Currently used by views.db_list() """
     log.debug( '\n\nstarting api_entries()' )
     connect_str = mongo_access.prep_connect_str( request )
-    entries_q = mongo_access.query_entries()
-    try:
-        entries = []
-        for ( idx, doc ) in enumerate( entries_q ):
-            doc = views_api_entries_helper.massage_doc_data( doc )
-            entries.append( doc )
-            # if idx > 10:
-            #     break
-        log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)}```' )
-        entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
-        # log.debug( f'entries_jsn, ```{pprint.pformat(entries_jsn)[0:1000]}```' )
-    except:
-        message = 'problem processing mongo data'
-        log.exception( message )
-        raise Exception( message )
+    entries_q = mongo_access.query_entries( connect_str )  # probable TODO: instantiate the helper and save the connect-string as an instance-attribute.
+    entries_jsn = views_api_entries_helper.massage_docs( entries_q )
+
 
     assert len(entries_jsn) > 10, len(entries_jsn)
     assert type(entries_jsn) == str, type(entries_jsn)
