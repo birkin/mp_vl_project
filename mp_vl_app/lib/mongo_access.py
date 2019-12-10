@@ -23,6 +23,23 @@ def prep_connect_str( request ):
     return connect_str
 
 
+def query_entries():
+    """ Returns entries for full listing page.
+        Called by views.api_entries(), which is accessed by views.db_list() """
+    entries_q = None
+    try:
+        m_client = pymongo.MongoClient( connect_str )
+        m_db = m_client[settings_app.DB_NAME]
+        m_collection = m_db[settings_app.DB_ENTRIES]
+        entries_q = m_collection.find( {} )
+    except:
+        message = 'problem accessing mongo'
+        log.exception( message )
+        pass
+    log.debug( f'entries_q (first 10), ```{pprint.pformat(entries_q[0:10])}```...' )
+    return entries_q
+
+
 # ----------------------------------
 # working dev-server demo-code below
 # ----------------------------------

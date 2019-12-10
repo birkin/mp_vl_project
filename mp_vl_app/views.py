@@ -79,26 +79,8 @@ def api_entries( request ):
     """ Returns json for entries.
         Currently used by views.db_list() """
     log.debug( '\n\nstarting api_entries()' )
-    # if project_settings.DEBUG == True and request.META.get('HTTP_HOST', '127.0.0.1')[0:9] == '127.0.0.1':
-    #     connect_str = f'mongodb://{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
-    # else:
-    #     username = urllib.parse.quote_plus( settings_app.DB_USER )
-    #     password = urllib.parse.quote_plus( settings_app.DB_PASS )
-    #     connect_str_init = f'mongodb://{username}:{password}@{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
-    #     log.debug( f'connect_str_init, ```{connect_str_init}```' )
-    #     connect_str = f'{connect_str_init}?authSource={settings_app.DB_NAME}'
     connect_str = mongo_access.prep_connect_str( request )
-    log.debug( f'connect_str, ```{connect_str}```' )
-    try:
-        m_client = pymongo.MongoClient( connect_str )
-        m_db = m_client[settings_app.DB_NAME]
-        m_collection = m_db[settings_app.DB_ENTRIES]
-        # entries_jsn = m_collection.find_one()
-        entries_q = m_collection.find( {} )
-    except:
-        message = 'problem accessing mongo'
-        log.exception( message )
-        raise Exception( message )
+    entries_q = mongo_access.query_entries()
     try:
         entries = []
         for ( idx, doc ) in enumerate( entries_q ):
@@ -125,14 +107,15 @@ def api_entries( request ):
 #     """ Returns json for entries.
 #         Currently used by views.db_list() """
 #     log.debug( '\n\nstarting api_entries()' )
-#     if project_settings.DEBUG == True and request.META.get('HTTP_HOST', '127.0.0.1')[0:9] == '127.0.0.1':
-#         connect_str = f'mongodb://{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
-#     else:
-#         username = urllib.parse.quote_plus( settings_app.DB_USER )
-#         password = urllib.parse.quote_plus( settings_app.DB_PASS )
-#         connect_str_init = f'mongodb://{username}:{password}@{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
-#         log.debug( f'connect_str_init, ```{connect_str_init}```' )
-#         connect_str = f'{connect_str_init}?authSource={settings_app.DB_NAME}'
+#     # if project_settings.DEBUG == True and request.META.get('HTTP_HOST', '127.0.0.1')[0:9] == '127.0.0.1':
+#     #     connect_str = f'mongodb://{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
+#     # else:
+#     #     username = urllib.parse.quote_plus( settings_app.DB_USER )
+#     #     password = urllib.parse.quote_plus( settings_app.DB_PASS )
+#     #     connect_str_init = f'mongodb://{username}:{password}@{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
+#     #     log.debug( f'connect_str_init, ```{connect_str_init}```' )
+#     #     connect_str = f'{connect_str_init}?authSource={settings_app.DB_NAME}'
+#     connect_str = mongo_access.prep_connect_str( request )
 #     log.debug( f'connect_str, ```{connect_str}```' )
 #     try:
 #         m_client = pymongo.MongoClient( connect_str )
@@ -147,10 +130,10 @@ def api_entries( request ):
 #     try:
 #         entries = []
 #         for ( idx, doc ) in enumerate( entries_q ):
-#             doc = entrs_hlpr.massage_doc_data( doc )
+#             doc = views_api_entries_helper.massage_doc_data( doc )
 #             entries.append( doc )
-#             if idx > 10:
-#                 break
+#             # if idx > 10:
+#             #     break
 #         log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)}```' )
 #         entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
 #         # log.debug( f'entries_jsn, ```{pprint.pformat(entries_jsn)[0:1000]}```' )
