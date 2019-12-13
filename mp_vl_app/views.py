@@ -82,10 +82,6 @@ def api_entries( request ):
     connect_str = mongo_access.prep_connect_str( request )
     entries_q = mongo_access.query_entries( connect_str )  # probable TODO: instantiate the helper and save the connect-string as an instance-attribute.
     entries_jsn = views_api_entries_helper.massage_docs( entries_q )
-
-
-    assert len(entries_jsn) > 10, len(entries_jsn)
-    assert type(entries_jsn) == str, type(entries_jsn)
     log.debug( 'returning entries_jsn response' )
     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
 
