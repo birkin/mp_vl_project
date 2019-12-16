@@ -12,6 +12,11 @@ STAFF_GROUP = os.environ['MV_DJ__STAFF_GROUP']  # not grouper-group; rather, nam
 TEST_META_DCT = json.loads( os.environ['MV_DJ__TEST_META_DCT_JSON'] )
 # POST_LOGIN_ADMIN_REVERSE_URL = os.environ['MV_DJ__POST_LOGIN_ADMIN_REVERSE_URL']  # tricky; for a direct-view of a model, the string would be in the form of: `admin:APP-NAME_MODEL-NAME_changelist`
 
+## data urls
+ENTRY_URL = os.environ['MV_DJ__ENTRY_URL']
+ENTRY_VERSION_URL = os.environ['MV_DJ__ENTRY_VERSION_URL']
+NEW_ENTRY_URL = os.environ['MV_DJ__NEW_ENTRY_URL']
+
 ## mongo
 DB_HOST = os.environ['MV_DJ__MONGO_HOST']
 DB_PORT =  os.environ['MV_DJ__MONGO_PORT']
