@@ -14,8 +14,11 @@ urlpatterns = [
     ## primary app urls...
     url( r'^info/$', views.info, name='info_url' ),  # home page
     url( r'^db_list/$', views.db_list, name='db_list_url' ),  # behind shib
+    url( r'^entry/(?P<id>.*)/$', views.entry, name='entry_url' ),  # behind shib
     url( r'^admin/', admin.site.urls ),  # eg host/project_x/admin/
     # url( r'^admin/login/', RedirectView.as_view(pattern_name='login_url') ),
+
+    ## api urls...
     url( r'^api/entries/$', views.api_entries, name='api_entries_url' ),  # behind shib
 
     ## support urls...
