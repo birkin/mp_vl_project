@@ -38,8 +38,9 @@ def info( request: django.core.handlers.wsgi.WSGIRequest ):  # type-annotation j
 def db_list( request ):
     """ Displays db-listing-summary. """
     log.debug( '\n\nstarting db_list()' )
-    ( scheme, host ) = ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1') )  # scheme: str, host: str
-    context: dict = views_dblist_helper.build_data( scheme, host, request.user )  # request.user: django.utils.functional.SimpleLazyObject
+    ( scheme, host, start_time ) = (
+        request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), datetime.datetime.now() )  # scheme: str, host: str, start_time: datetime.datetime
+    context: dict = views_dblist_helper.build_data( scheme, host, request.user, start_time )  # request.user: django.utils.functional.SimpleLazyObject
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:

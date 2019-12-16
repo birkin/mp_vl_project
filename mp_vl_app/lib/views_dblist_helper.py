@@ -12,7 +12,7 @@ from django.core.urlresolvers import reverse
 log = logging.getLogger(__name__)
 
 
-def build_data( scheme: str, host: str, user: django.utils.functional.SimpleLazyObject ) -> dict:
+def build_data( scheme: str, host: str, user: django.utils.functional.SimpleLazyObject, start_time: datetime.datetime ) -> dict:
     """ Builds and returns data-dct.
         Called by views.db_list()
         Note: decision... I could make the api call return non-jsonized mongo data,
@@ -34,5 +34,6 @@ def build_data( scheme: str, host: str, user: django.utils.functional.SimpleLazy
     else:
         context['logged_in'] = False
     context['username'] = username
+    context['time_taken'] = str( datetime.datetime.now() - start_time )
     log.debug( f'context.keys(), ```{pprint.pformat(context.keys())}```' )
     return context
