@@ -80,8 +80,8 @@ def api_entries( request ):
         Currently used by views.db_list() """
     log.debug( '\n\nstarting api_entries()' )
     connect_str = mongo_access.prep_connect_str( request )
-    entries_q = mongo_access.query_entries( connect_str )  # probable TODO: instantiate the helper and save the connect-string as an instance-attribute.
-    entries_jsn = views_api_entries_helper.massage_docs( entries_q )
+    entries_query = mongo_access.query_entries( connect_str )  # probable TODO: instantiate the helper and save the connect-string as an instance-attribute.
+    entries_jsn = views_api_entries_helper.massage_docs( entries_query )
     log.debug( 'returning entries_jsn response' )
     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
 
