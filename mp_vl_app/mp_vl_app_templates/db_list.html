@@ -12,6 +12,7 @@ Mapping Violence Database
     div#admin_info {
         margin-top: -2em;
         float: right;
+        padding-left: 0;
     }
     p#data_links {
         margin-top: -.5em;
@@ -36,6 +37,18 @@ Mapping Violence Database
         color: red;
         font-weight: bold;
         margin-top: -1.25em;
+    }
+    a.edit {
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 0.75rem;
+        /*font-weight: 500;*/
+    }
+    th.description {
+        padding-left: 5em;
+    }
+    td.description {
+        /*margin-left: 2em;*/
+        padding-left: 4em;
     }
 </style>
 {% endblock page_css %}
@@ -70,44 +83,45 @@ Mapping Violence Database
                     <th class="MuiTableCell-root MuiTableCell-head" scope="col"></th>
                     <th class="MuiTableCell-root MuiTableCell-head" scope="col">Title</th>
                     <th class="MuiTableCell-root MuiTableCell-head" scope="col">Date</th>
-                    <th class="MuiTableCell-root MuiTableCell-head" scope="col">Description</th>
+                    <th class="MuiTableCell-root MuiTableCell-head description" scope="col">Description</th>
                 </tr>
             </thead>
             <tbody class="MuiTableBody-root table-body">
                 {% for record in data %}
                 <tr class="MuiTableRow-root table-row MuiTableRow-hover">
-                    <td><a href="{% url 'entry_url' record.id_clean %}">(edit)</a></td>
+                    <td>
+                        <a href="{% url 'entry_url' record.id_clean %}" class="edit">(edit)</a></td>
                     <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                    <div class="table-row-as-link-short-text">
-                        {{ record.title }}
-                    </div>
-                    <div class="table-row-as-link-full-text">
-                        {{ record.title }}
-                    </div>
+                        <div class="table-row-as-link-short-text">
+                            {{ record.title }}
+                        </div>
+                        <div class="table-row-as-link-full-text">
+                            {{ record.title }}
+                        </div>
                     </td>
                     <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                    <div class="table-row-as-link-short-text">
-                        {{ record.date_display }}
-                    </div>
-                    <div class="table-row-as-link-full-text">
-                        {{ record.date_display }}
-                    </div>
+                        <div class="table-row-as-link-short-text">
+                            {{ record.date_display }}
+                        </div>
+                        <div class="table-row-as-link-full-text">
+                            {{ record.date_display }}
+                        </div>
                     </td>
-                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                    <div class="table-row-as-link-short-text">
-                        {% if record.description %}
-                            <em>{{ record.description|truncatewords:15 }}</em>
-                        {% else %}
-                            <em>Data Attribute Not Found</em>
-                        {% endif %}
-                    </div>
-                    <div class="table-row-as-link-full-text">
-                        {% if record.description %}
-                            <em>{{ record.description|truncatewords:15 }}</em>
-                        {% else %}
-                            <em>Data Attribute Not Found</em>
-                        {% endif %}
-                    </div>
+                    <td class="MuiTableCell-root table-cell MuiTableCell-body description">
+                        <div class="table-row-as-link-short-text">
+                            {% if record.description %}
+                                <em>{{ record.description|truncatewords:15 }}</em>
+                            {% else %}
+                                <em>Data Attribute Not Found</em>
+                            {% endif %}
+                        </div>
+                        <div class="table-row-as-link-full-text">
+                            {% if record.description %}
+                                <em>{{ record.description|truncatewords:15 }}</em>
+                            {% else %}
+                                <em>Data Attribute Not Found</em>
+                            {% endif %}
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
