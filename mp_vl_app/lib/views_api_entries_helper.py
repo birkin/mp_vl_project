@@ -81,9 +81,10 @@ def initialize_date_data( date_dct ) -> Tuple:
     return ( year, month, day, modifier, year_as_bool, month_as_bool, day_as_bool, modifier_as_bool )
 
 
-@functools.lru_cache( maxsize=128 )
+@functools.lru_cache( maxsize=16 )
 def intify_month( num ) -> int:  # TypeVar( 'num', int, float )
     """ Converts given month number to appropriate index-value.
+        Hmm... as I read over C's code, I think simply using ```int(num) - 1``` here would do the trick.
         Called by initialize_date_data() """
     log.debug( f'num, `{num}`; type(num), `{type(num)}`' )
     month_names = [
