@@ -1,24 +1,26 @@
 import json, logging, pprint
+from typing import Tuple
+
+import pymongo
 
 
 log = logging.getLogger(__name__)
 
 
-def massage_docs( mongo_docs ):
+def massage_docs( entries_query: pymongo.cursor.Cursor ) -> str:
     """ Converts doc-objects into json for response.
         Called by views.api_entries() """
     entries_jsn = '{}'
     try:
         entries = []
-        for ( idx, doc ) in enumerate( mongo_docs ):
-            doc = massage_doc_data( doc )
+        for ( idx, doc ) in enumerate( entries_query ):  # ( idx -> int, doc -> dict )
+            doc: dict = massage_doc_data( doc )
             entries.append( doc )
         log.debug( f'entries-type, `{type(entries)}`' )
         log.debug( f'entries (first 10), ```{pprint.pformat(entries[0:10])}```' )
         entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
     except:
-        message = 'problem processing mongo data'
-        log.exception( message )
+        log.exception( 'problem processing mongo data' )
         pass
     return entries_jsn
 
