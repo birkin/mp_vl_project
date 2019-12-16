@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, logging, os, pprint, urllib.parse
-import pymongo
 
+import django, pymongo
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
@@ -35,11 +35,11 @@ def info( request ):
 
 
 @shib_login
-def db_list( request ):
+def db_list( request: django.core.handlers.wsgi.WSGIRequest ):
     """ Displays db-listing-summary. """
     log.debug( '\n\nstarting db_list()' )
-    ( scheme, host ) = ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1') )
-    context = views_dblist_helper.build_data( scheme, host, request.user )
+    ( scheme, host ) = ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1') )  # scheme: str, host: str
+    context: dict = views_dblist_helper.build_data( scheme, host, request.user )  # request.user: django.utils.functional.SimpleLazyObject
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:

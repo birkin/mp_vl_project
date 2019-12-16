@@ -9,6 +9,16 @@ Mapping Violence Database
 
 {% block page_css %}
 <style type="text/css">
+    div#admin_info {
+        margin-top: -2em;
+        float: right;
+    }
+    p#data_links {
+        margin-top: -.5em;
+    }
+    ul#data_bullet_section {
+        margin-top: -1em;
+    }
     hr {
         margin-top: 1em;
     }
@@ -38,7 +48,16 @@ Mapping Violence Database
 <div class="MuiContainer-root jss4 MuiContainer-maxWidthLg">
 
     <h1 id="page_title">Mapping Violence Database</h1>
-    <p id="under_construction">( under construction; the real site remains at: <a href="http://data.mappingviolence.org/">data.mappingviolence.org</a> )</p>
+
+    <div id="admin_info">
+        <p id="under_construction">( under construction; the real site remains at: <a href="http://data.mappingviolence.org/">data.mappingviolence.org</a> )</p>
+        <p id="data_links">Convenience-links to data-exports...</p>
+        <ul id="data_bullet_section">
+            <li><a href="{{ entry_url }}">Exported entry data</a></li>
+            <li><a href="{{ entry_version_url }}">Exported entry_version data</a></li>
+            <li><a href="{{ new_entry_url }}">Exported new_entry data</a></li>
+        </ul>
+    </div>
 
     <p id="message">Below are all the entries ever created by the Mapping Violence team.</p>
 
