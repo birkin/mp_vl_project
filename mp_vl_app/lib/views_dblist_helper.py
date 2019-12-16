@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import datetime, json, logging, os, pprint
+from typing import List
 
-import requests
+import django, requests
 from mp_vl_app import settings_app
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -11,7 +12,7 @@ from django.core.urlresolvers import reverse
 log = logging.getLogger(__name__)
 
 
-def build_data( scheme, host, user ):
+def build_data( scheme: str, host: str, user: django.utils.functional.SimpleLazyObject ) -> dict:
     """ Builds and returns data-dct.
         Called by views.db_list()
         Note: decision... I could make the api call return non-jsonized mongo data,
@@ -21,12 +22,15 @@ def build_data( scheme, host, user ):
     api_url = f'{scheme}://{host}{reverse("api_entries_url")}'
     log.debug( f'api_url, ```{api_url}```' )
     r = requests.get( api_url )
-    data = r.json()
+    data: List(dict) = r.json()
     context = { 'data': data }
     username = None
-    if user.is_authenticated:
-        username = user.first_name
+    if user.is_authenticated:  # `user` becomes `django.contrib.auth.models.User` or `...AnonymousUser`
+        username: str = user.first_name
         context['logged_in'] = True
+        context['entry_url'] = settings_app.ENTRY_URL
+        context['entry_version_url'] = settings_app.ENTRY_VERSION_URL
+        context['new_entry_url'] = settings_app.NEW_ENTRY_URL
     else:
         context['logged_in'] = False
     context['username'] = username
