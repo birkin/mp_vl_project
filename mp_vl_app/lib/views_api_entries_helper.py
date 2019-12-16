@@ -1,4 +1,4 @@
-import json, logging, pprint
+import functools, json, logging, pprint
 from typing import Tuple
 
 import pymongo
@@ -17,7 +17,7 @@ def massage_docs( entries_query: pymongo.cursor.Cursor ) -> str:
         for ( idx, doc ) in enumerate( entries_query ):  # ( idx -> int, doc -> dict )
             doc: dict = massage_doc_data( doc )
             entries.append( doc )
-        log.debug( f'entries-type, `{type(entries)}`' )
+        log.debug( f'intify_month.cache_info(), ```{intify_month.cache_info()}```' )
         log.debug( f'entries (first 10), ```{pprint.pformat(entries[0:10])}```' )
         entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
     except:
@@ -81,6 +81,7 @@ def initialize_date_data( date_dct ) -> Tuple:
     return ( year, month, day, modifier, year_as_bool, month_as_bool, day_as_bool, modifier_as_bool )
 
 
+@functools.lru_cache( maxsize=128 )
 def intify_month( num ) -> int:  # TypeVar( 'num', int, float )
     """ Converts given month number to appropriate index-value.
         Called by initialize_date_data() """
