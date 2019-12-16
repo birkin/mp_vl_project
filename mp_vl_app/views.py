@@ -17,7 +17,7 @@ from mp_vl_app.lib.shib_auth import shib_login  # decorator
 log = logging.getLogger(__name__)
 
 
-def info( request ):
+def info( request: django.core.handlers.wsgi.WSGIRequest ):  # type-annotation just for reference
     """ Displays home page. """
     log.debug( '\n\nstarting info()' )
     log.debug( f'session, ```{request.session.items()}```' )
@@ -35,7 +35,7 @@ def info( request ):
 
 
 @shib_login
-def db_list( request: django.core.handlers.wsgi.WSGIRequest ):
+def db_list( request ):
     """ Displays db-listing-summary. """
     log.debug( '\n\nstarting db_list()' )
     ( scheme, host ) = ( request.scheme, request.META.get('HTTP_HOST', '127.0.0.1') )  # scheme: str, host: str
@@ -46,6 +46,14 @@ def db_list( request: django.core.handlers.wsgi.WSGIRequest ):
         resp = render( request, 'mp_vl_app_templates/db_list.html', context )
     log.debug( 'returning resp' )
     return resp
+
+
+@shib_login
+def entry( request, id: str ):
+    """ Displays db-listing-summary. """
+    log.debug( '\n\nstarting entry()' )
+    return HttpResponse( '<p>editing coming</p>' )
+
 
 
 @shib_login
@@ -72,6 +80,11 @@ def logout( request ):
     django_logout( request )
     log.debug( f'logout complete; returning redirect response to, ```{redirect_url}```' )
     return HttpResponseRedirect( redirect_url )
+
+
+# ===========================
+# api urls
+# ===========================
 
 
 @shib_login
