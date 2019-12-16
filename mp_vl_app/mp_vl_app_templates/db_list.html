@@ -67,6 +67,7 @@ Mapping Violence Database
         <table class="MuiTable-root">
             <thead class="MuiTableHead-root table-head">
                 <tr class="MuiTableRow-root table-row MuiTableRow-head">
+                    <th class="MuiTableCell-root MuiTableCell-head" scope="col"></th>
                     <th class="MuiTableCell-root MuiTableCell-head" scope="col">Title</th>
                     <th class="MuiTableCell-root MuiTableCell-head" scope="col">Date</th>
                     <th class="MuiTableCell-root MuiTableCell-head" scope="col">Description</th>
@@ -75,6 +76,7 @@ Mapping Violence Database
             <tbody class="MuiTableBody-root table-body">
                 {% for record in data %}
                 <tr class="MuiTableRow-root table-row MuiTableRow-hover">
+                    <td><a href="{% url 'entry_url' record.id_clean %}">(edit)</a></td>
                     <td class="MuiTableCell-root table-cell MuiTableCell-body">
                     <div class="table-row-as-link-short-text">
                         {{ record.title }}
@@ -109,61 +111,6 @@ Mapping Violence Database
                     </td>
                 </tr>
                 {% endfor %}
-
-                <!--
-                <tr class="MuiTableRow-root table-row MuiTableRow-hover">
-                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                    <div class="table-row-as-link-short-text">
-                        Test
-                    </div>
-                    <div class="table-row-as-link-full-text">
-                        Test
-                    </div>
-                    </td>
-                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                    <div class="table-row-as-link-short-text">
-                        Early 2018
-                    </div>
-                    <div class="table-row-as-link-full-text">
-                        Early 2018
-                    </div>
-                    </td>
-                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                    <div class="table-row-as-link-short-text">
-                        <em>Data Attribute Not Found</em>
-                    </div>
-                    <div class="table-row-as-link-full-text">
-                        <em>Data Attribute Not Found</em>
-                    </div>
-                    </td>
-                </tr>
-                <tr class="MuiTableRow-root table-row MuiTableRow-hover">
-                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                    <div class="table-row-as-link-short-text">
-                        <em>Data Attribute Not Found</em>
-                    </div>
-                    <div class="table-row-as-link-full-text">
-                        <em>Data Attribute Not Found</em>
-                    </div>
-                    </td>
-                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                    <div class="table-row-as-link-short-text">
-                        INVALID DATE
-                    </div>
-                    <div class="table-row-as-link-full-text">
-                        INVALID DATE
-                    </div>
-                    </td>
-                    <td class="MuiTableCell-root table-cell MuiTableCell-body">
-                    <div class="table-row-as-link-short-text">
-                        <em>Data Attribute Not Found</em>
-                    </div>
-                    <div class="table-row-as-link-full-text">
-                        <em>Data Attribute Not Found</em>
-                    </div>
-                    </td>
-                </tr>
-                -->
             </tbody>
         </table>
     </div>  <!-- end <div class="data-pool"> -->

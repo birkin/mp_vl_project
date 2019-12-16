@@ -31,6 +31,7 @@ def massage_doc_data( doc: dict ) -> dict:
         Called by massage_docs() """
     log.debug( f'initial doc, ```{pprint.pformat(doc)}```' )
     doc['_id'] = str( doc['_id'] )
+    doc['id_clean'] = str( doc['_id'] )  # so template can access this key
     if doc.get( 'date', None ):
         doc['date_display'] = stringify_date( doc['date'] )
     else:
