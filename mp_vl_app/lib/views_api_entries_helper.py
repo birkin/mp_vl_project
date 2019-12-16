@@ -9,6 +9,7 @@ log = logging.getLogger(__name__)
 
 def massage_docs( entries_query: pymongo.cursor.Cursor ) -> str:
     """ Converts doc-objects into json for response.
+        NB: Because `entries_query` is a pymongo-cursor, applying a slice would act as a filter to the variable itself, not to a copy, as may be expected.
         Called by views.api_entries() """
     entries_jsn = '{}'
     try:
@@ -25,26 +26,26 @@ def massage_docs( entries_query: pymongo.cursor.Cursor ) -> str:
     return entries_jsn
 
 
-def massage_doc_data( doc_dct ):
+def massage_doc_data( doc: dict ) -> dict:
     """ Updates doc data so it can be jsonized.
         Called by massage_docs() """
-    log.debug( f'initial doc_dct, ```{pprint.pformat(doc_dct)}```' )
-    doc_dct['_id'] = str( doc_dct['_id'] )
-    if doc_dct.get( 'date', None ):
-        doc_dct['date_display'] = stringify_date( doc_dct['date'] )
+    log.debug( f'initial doc, ```{pprint.pformat(doc)}```' )
+    doc['_id'] = str( doc['_id'] )
+    if doc.get( 'date', None ):
+        doc['date_display'] = stringify_date( doc['date'] )
     else:
-        doc_dct['date_display'] = '(no date info)'
-    if 'metadata' in doc_dct.keys():
-        if 'lastEditedAt' in doc_dct['metadata'].keys():
-            doc_dct['metadata']['lastEditedAt'] = str( doc_dct['metadata']['lastEditedAt'] )
-        if 'lastEditedBy' in doc_dct['metadata'].keys():
-            if type( doc_dct['metadata']['lastEditedBy'] ) != str:
-                doc_dct['metadata']['lastEditedBy'] = str( doc_dct['metadata']['lastEditedBy'] )
-    log.debug( f'updated doc_dct, ```{pprint.pformat(doc_dct)}```' )
-    return doc_dct
+        doc['date_display'] = '(no date info)'
+    if 'metadata' in doc.keys():
+        if 'lastEditedAt' in doc['metadata'].keys():
+            doc['metadata']['lastEditedAt'] = str( doc['metadata']['lastEditedAt'] )
+        if 'lastEditedBy' in doc['metadata'].keys():
+            if type( doc['metadata']['lastEditedBy'] ) != str:
+                doc['metadata']['lastEditedBy'] = str( doc['metadata']['lastEditedBy'] )
+    log.debug( f'updated doc, ```{pprint.pformat(doc)}```' )
+    return doc
 
 
-def stringify_date( date_dct ):
+def stringify_date( date_dct ) -> str:
     """ Creates and returns a display-date string from given date-fields.
         Called by massage_doc_data() """
     date_display_str = 'INVALID DATE'
@@ -64,13 +65,13 @@ def stringify_date( date_dct ):
     return date_display_str
 
 
-def initialize_date_data( date_dct ):
+def initialize_date_data( date_dct ) -> Tuple:
     """ Initializes vars.
         Called by stringify_date() """
     log.debug( f'date_dct, ```{date_dct}```' )
-    year, month, day, modifier = (
-        date_dct.get('year', None), date_dct.get('month', None), date_dct.get('day', None), date_dct.get('modifier', None) )
-    month = intify_month( date_dct['month'] )
+    ( year, month, day, modifier ) = (
+        date_dct.get('year', None), date_dct.get('month', None), date_dct.get('day', None), date_dct.get('modifier', None) )  # ( year: int, month: int or float, day: int, modifier: str )
+    month: int = intify_month( date_dct['month'] )
     year_as_bool = True if year else False
     month_as_bool = True if month else False
     day_as_bool = True if day else False
@@ -79,8 +80,8 @@ def initialize_date_data( date_dct ):
     return ( year, month, day, modifier, year_as_bool, month_as_bool, day_as_bool, modifier_as_bool )
 
 
-def intify_month( num ):
-    """ Converts given month number to appropriate string.
+def intify_month( num ) -> int:  # TypeVar( 'num', int, float )
+    """ Converts given month number to appropriate index-value.
         Called by initialize_date_data() """
     log.debug( f'num, `{num}`; type(num), `{type(num)}`' )
     month_names = [

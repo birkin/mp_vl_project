@@ -62,7 +62,7 @@ class LoginDecoratorHelper(object):
     def __init__( self ):
         pass
 
-    def prep_shib_dct( self, request_meta_dct, host ):
+    def prep_shib_dct( self, request_meta_dct, host ) -> dict:
         """ Returns dct from shib-info.
             Called by shib_login() """
         log.debug( 'starting prep_shib_dct()' )

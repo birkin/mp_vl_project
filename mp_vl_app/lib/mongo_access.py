@@ -25,6 +25,7 @@ def prep_connect_str( request ) -> str:
 
 def query_entries( connect_str: str ) -> pymongo.cursor.Cursor:  # or None
     """ Returns entries for full listing page.
+        NB: Because `entries_query` is a pymongo-cursor, applying a slice would act as a filter to the variable itself, not to a copy, as may be expected.
         Called by views.api_entries(), which is accessed by views.db_list() """
     entries_query = None
     try:
