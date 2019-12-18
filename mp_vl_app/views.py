@@ -10,7 +10,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from mp_vl_app import settings_app
 from mp_vl_app.lib import mongo_access
-from mp_vl_app.lib import views_version_helper, views_info_helper, views_dblist_helper, views_api_entries_helper
+from mp_vl_app.lib import views_version_helper, views_info_helper
+from mp_vl_app.lib import views_dblist_helper, views_api_entries_helper
+from mp_vl_app.lib import views_entry_helper
 from mp_vl_app.lib.shib_auth import shib_login  # decorator
 
 
@@ -53,8 +55,16 @@ def db_list( request ):
 def entry( request, id: str ):
     """ Displays db-listing-summary. """
     log.debug( '\n\nstarting entry()' )
-    return HttpResponse( '<p>editing coming</p>' )
-
+    # return HttpResponse( '<p>entry info coming</p>' )
+    ( scheme, host, start_time ) = (
+        request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), datetime.datetime.now() )  # scheme: str, host: str, start_time: datetime.datetime
+    context: dict = views_entry_helper.build_get_data( id, scheme, host, request.user, start_time )  # request.user: django.utils.functional.SimpleLazyObject
+    if request.GET.get('format', '') == 'json':
+        resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
+    else:
+        resp = render( request, 'mp_vl_app_templates/entry_get.html', context )
+    log.debug( 'returning resp' )
+    return resp
 
 
 @shib_login
@@ -100,50 +110,11 @@ def api_entries( request ):
     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
 
 
-# @shib_login
-# def api_entries( request ):
-#     """ Returns json for entries.
-#         Currently used by views.db_list() """
-#     log.debug( '\n\nstarting api_entries()' )
-#     # if project_settings.DEBUG == True and request.META.get('HTTP_HOST', '127.0.0.1')[0:9] == '127.0.0.1':
-#     #     connect_str = f'mongodb://{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
-#     # else:
-#     #     username = urllib.parse.quote_plus( settings_app.DB_USER )
-#     #     password = urllib.parse.quote_plus( settings_app.DB_PASS )
-#     #     connect_str_init = f'mongodb://{username}:{password}@{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
-#     #     log.debug( f'connect_str_init, ```{connect_str_init}```' )
-#     #     connect_str = f'{connect_str_init}?authSource={settings_app.DB_NAME}'
-#     connect_str = mongo_access.prep_connect_str( request )
-#     log.debug( f'connect_str, ```{connect_str}```' )
-#     try:
-#         m_client = pymongo.MongoClient( connect_str )
-#         m_db = m_client[settings_app.DB_NAME]
-#         m_collection = m_db[settings_app.DB_ENTRIES]
-#         # entries_jsn = m_collection.find_one()
-#         entries_q = m_collection.find( {} )
-#     except:
-#         message = 'problem accessing mongo'
-#         log.exception( message )
-#         raise Exception( message )
-#     try:
-#         entries = []
-#         for ( idx, doc ) in enumerate( entries_q ):
-#             doc = views_api_entries_helper.massage_doc_data( doc )
-#             entries.append( doc )
-#             # if idx > 10:
-#             #     break
-#         log.debug( f'entries-type, `{type(entries)}`; entries, ```{pprint.pformat(entries)}```' )
-#         entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
-#         # log.debug( f'entries_jsn, ```{pprint.pformat(entries_jsn)[0:1000]}```' )
-#     except:
-#         message = 'problem processing mongo data'
-#         log.exception( message )
-#         raise Exception( message )
-
-#     assert len(entries_jsn) > 10, len(entries_jsn)
-#     assert type(entries_jsn) == str, type(entries_jsn)
-#     log.debug( 'returning entries_jsn response' )
-#     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
+@shib_login
+def api_entry( request, id ):
+    """ Returns json for given entry.
+        Called by views.entry() """
+    return { 'foo': 'bar' }
 
 
 # ===========================
