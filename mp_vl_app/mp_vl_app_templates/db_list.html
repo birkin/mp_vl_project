@@ -38,7 +38,7 @@ Mapping Violence Database
         font-weight: bold;
         margin-top: -1.25em;
     }
-    a.edit {
+    a.info {
         color: rgba(0, 0, 0, 0.54);
         font-size: 0.75rem;
         /*font-weight: 500;*/
@@ -90,7 +90,7 @@ Mapping Violence Database
                 {% for record in data %}
                 <tr class="MuiTableRow-root table-row MuiTableRow-hover">
                     <td>
-                        <a href="{% url 'entry_url' record.id_clean %}" class="edit">(edit)</a></td>
+                        <a href="{% url 'entry_url' record.id_clean %}" class="info">(info)</a></td>
                     <td class="MuiTableCell-root table-cell MuiTableCell-body">
                         <div class="table-row-as-link-short-text">
                             {{ record.title }}
