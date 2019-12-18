@@ -18,8 +18,9 @@ urlpatterns = [
     url( r'^admin/', admin.site.urls ),  # eg host/project_x/admin/
     # url( r'^admin/login/', RedirectView.as_view(pattern_name='login_url') ),
 
-    ## api urls...
-    url( r'^api/entries/$', views.api_entries, name='api_entries_url' ),  # behind shib
+    ## api urls (all behind auth)...
+    url( r'^api/entries/$', views.api_entries, name='api_entries_url' ),
+    url( r'^api/entry/(?P<id>.*)/$', views.api_entry, name='api_entry_url' ),
 
     ## support urls...
     url( r'^login/$', views.login, name='login_url' ),
