@@ -88,6 +88,18 @@ def stringify_month( num ) -> str:  # TypeVar( 'num', int, float )
     log.debug( f'num, `{num}`; type(num), `{type(num)}`' )
     month_names = [
         'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
-    month_int = month_names[ int(num) - 1 ]
-    log.debug( f'month_int, `{month_int}`' )
-    return month_int
+    month_name: str = month_names[ int(num) - 1 ]
+    log.debug( f'month_name, `{month_name}`' )
+    return month_name
+
+
+## temp, for timeit testing -- delete after 2020-Jan-01
+def stringify_month_nocache( num ) -> str:  # TypeVar( 'num', int, float )
+    """ Converts given month number to appropriate string.
+        Called by initialize_date_data() """
+    log.debug( f'num, `{num}`; type(num), `{type(num)}`' )
+    month_names = [
+        'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
+    month_name: str = month_names[ int(num) - 1 ]
+    log.debug( f'month_name, `{month_name}`' )
+    return month_name
