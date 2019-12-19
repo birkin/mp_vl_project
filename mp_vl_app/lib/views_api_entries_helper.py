@@ -17,7 +17,7 @@ def massage_docs( entries_query: pymongo.cursor.Cursor ) -> str:
         for ( idx, doc ) in enumerate( entries_query ):  # ( idx -> int, doc -> dict )
             doc: dict = massage_doc_data( doc )
             entries.append( doc )
-        log.debug( f'intify_month.cache_info(), ```{intify_month.cache_info()}```' )
+        log.debug( f'stringify_month.cache_info(), ```{stringify_month.cache_info()}```' )
         log.debug( f'entries (first 10), ```{pprint.pformat(entries[0:10])}```' )
         entries_jsn = json.dumps( entries, sort_keys=True, indent=2 )
     except:
@@ -72,7 +72,7 @@ def initialize_date_data( date_dct ) -> Tuple:
     log.debug( f'date_dct, ```{date_dct}```' )
     ( year, month, day, modifier ) = (
         date_dct.get('year', None), date_dct.get('month', None), date_dct.get('day', None), date_dct.get('modifier', None) )  # ( year: int, month: int or float, day: int, modifier: str )
-    month: int = intify_month( date_dct['month'] )
+    month: str = stringify_month( date_dct['month'] )
     year_as_bool = True if year else False
     month_as_bool = True if month else False
     day_as_bool = True if day else False
@@ -82,7 +82,7 @@ def initialize_date_data( date_dct ) -> Tuple:
 
 
 @functools.lru_cache( maxsize=16 )
-def intify_month( num ) -> int:  # TypeVar( 'num', int, float )
+def stringify_month( num ) -> str:  # TypeVar( 'num', int, float )
     """ Converts given month number to appropriate index-value.
         Hmm... as I read over C's code, I think simply using ```int(num) - 1``` here would do the trick.
         Called by initialize_date_data() """
