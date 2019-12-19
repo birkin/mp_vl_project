@@ -83,8 +83,7 @@ def initialize_date_data( date_dct ) -> Tuple:
 
 @functools.lru_cache( maxsize=16 )
 def stringify_month( num ) -> str:  # TypeVar( 'num', int, float )
-    """ Converts given month number to appropriate index-value.
-        Hmm... as I read over C's code, I think simply using ```int(num) - 1``` here would do the trick.
+    """ Converts given month number to appropriate string.
         Called by initialize_date_data() """
     log.debug( f'num, `{num}`; type(num), `{type(num)}`' )
     month_names = [
