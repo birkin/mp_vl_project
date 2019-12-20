@@ -114,7 +114,8 @@ def api_entries( request ):
 def api_entry( request, id ):
     """ Returns json for given entry.
         Called by views.entry() """
-    return { 'foo': 'bar' }
+    jsn = json.dumps( { 'foo': 'bar' } )
+    return HttpResponse( jsn, content_type='application/json; charset=utf-8' )
 
 
 # ===========================
