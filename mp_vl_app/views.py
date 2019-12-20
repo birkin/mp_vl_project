@@ -114,8 +114,12 @@ def api_entries( request ):
 def api_entry( request, id ):
     """ Returns json for given entry.
         Called by views.entry() """
-    jsn = json.dumps( { 'foo': 'bar' } )
-    return HttpResponse( jsn, content_type='application/json; charset=utf-8' )
+    log.debug( '\n\nstarting api_entry()' )
+    entry_query = mongo_access.query_entry( id, request )
+    entry_jsn = views_api_entry_helper.massage_doc( entry_query )
+    # entry_jsn = json.dumps( { 'foo': 'bar' } )
+    log.debug( 'returning entry_jsn response' )
+    return HttpResponse( entry_jsn, content_type='application/json; charset=utf-8' )
 
 
 # ===========================
