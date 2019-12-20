@@ -62,7 +62,7 @@ def entry( request, id: str ):
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
-        resp = render( request, 'mp_vl_app_templates/entry_get.html', context )
+        resp = render( request, 'mp_vl_app_templates/entry.html', context )
     log.debug( 'returning resp' )
     return resp
 
