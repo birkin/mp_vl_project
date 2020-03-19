@@ -5,21 +5,29 @@ import datetime, json, logging, os, pprint, urllib.parse
 import django, pymongo
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
-from django.core.urlresolvers import reverse
+from django.core.handlers import wsgi  # just for type-annotation
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse  # was `from django.core.urlresolvers import reverse` -- deprecated
 from mp_vl_app import settings_app
 from mp_vl_app.lib import mongo_access
-from mp_vl_app.lib import views_version_helper, views_info_helper
 from mp_vl_app.lib import views_dblist_helper, views_api_entries_helper
 from mp_vl_app.lib import views_entry_helper
+from mp_vl_app.lib import views_version_helper, views_info_helper
 from mp_vl_app.lib.shib_auth import shib_login  # decorator
 
 
 log = logging.getLogger(__name__)
 
 
-def info( request: django.core.handlers.wsgi.WSGIRequest ):  # type-annotation just for reference
+def react_tutorial( request ):
+    log.debug( '\n\nstarting react_tutorial()' )
+    context = {}
+    resp = render( request, 'mp_vl_app_templates/tutorial.html', context )
+    return resp
+
+
+def info( request: wsgi.WSGIRequest ):  # type-annotation just for reference
     """ Displays home page. """
     log.debug( '\n\nstarting info()' )
     log.debug( f'session, ```{request.session.items()}```' )
