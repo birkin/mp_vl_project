@@ -20,10 +20,10 @@ from mp_vl_app.lib.shib_auth import shib_login  # decorator
 log = logging.getLogger(__name__)
 
 
-def react_tutorial( request ):
-    log.debug( '\n\nstarting react_tutorial()' )
-    context = {}
-    resp = render( request, 'mp_vl_app_templates/tutorial.html', context )
+def tutorial_01( request ):
+    log.debug( '\n\nstarting tutorial_01()' )
+    context = { 'name_value': request.GET.get( 'name', None ) }
+    resp = render( request, 'mp_vl_app_templates/tutorial_01.html', context )
     return resp
 
 

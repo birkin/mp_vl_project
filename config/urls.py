@@ -29,7 +29,7 @@ urlpatterns = [
     url( r'^error_check/$', views.error_check, name='error_check_url' ),
 
     ## other...
-    url( r'^react_tutorial/$', views.react_tutorial, name='react_tutorial_url' ),
+    url( r'^react_tutorial_01/$', views.tutorial_01, name='tutorial_01_url' ),
 
     url( r'^$', RedirectView.as_view(pattern_name='info_url') ),
 
