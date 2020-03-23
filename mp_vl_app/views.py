@@ -20,17 +20,24 @@ from mp_vl_app.lib.shib_auth import shib_login  # decorator
 log = logging.getLogger(__name__)
 
 
-def tutorial_01( request ):
-    log.debug( '\n\nstarting tutorial_01()' )
+# ---------------------
+# react experimentation
+# ---------------------
+
+def exp_01( request ):
+    log.debug( '\n\nstarting exp_01()' )
     context = { 'name_value': request.GET.get( 'name', None ) }
-    resp = render( request, 'mp_vl_app_templates/tutorial_01.html', context )
+    resp = render( request, 'mp_vl_app_templates/exp_01.html', context )
     return resp
 
-def tutorial_02( request ):
-    log.debug( '\n\nstarting tutorial_02()' )
+def exp_02( request ):
+    log.debug( '\n\nstarting exp_02()' )
     context = { 'name_value': request.GET.get( 'name', None ) }
-    resp = render( request, 'mp_vl_app_templates/tutorial_02.html', context )
+    resp = render( request, 'mp_vl_app_templates/exp_02.html', context )
     return resp
+
+# ---------------------
+
 
 def info( request: wsgi.WSGIRequest ):  # type-annotation just for reference
     """ Displays home page. """
