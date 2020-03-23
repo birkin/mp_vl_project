@@ -26,6 +26,11 @@ def tutorial_01( request ):
     resp = render( request, 'mp_vl_app_templates/tutorial_01.html', context )
     return resp
 
+def tutorial_02( request ):
+    log.debug( '\n\nstarting tutorial_02()' )
+    context = { 'name_value': request.GET.get( 'name', None ) }
+    resp = render( request, 'mp_vl_app_templates/tutorial_02.html', context )
+    return resp
 
 def info( request: wsgi.WSGIRequest ):  # type-annotation just for reference
     """ Displays home page. """

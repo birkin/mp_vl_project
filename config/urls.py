@@ -30,6 +30,7 @@ urlpatterns = [
 
     ## other...
     url( r'^react_tutorial_01/$', views.tutorial_01, name='tutorial_01_url' ),
+    url( r'^react_tutorial_02/$', views.tutorial_02, name='tutorial_02_url' ),
 
     url( r'^$', RedirectView.as_view(pattern_name='info_url') ),
 
