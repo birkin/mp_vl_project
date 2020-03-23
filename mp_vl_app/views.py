@@ -32,8 +32,14 @@ def exp_01( request ):
 
 def exp_02( request ):
     log.debug( '\n\nstarting exp_02()' )
-    context = { 'name_value': request.GET.get( 'name', None ) }
+    context = {}
     resp = render( request, 'mp_vl_app_templates/exp_02.html', context )
+    return resp
+
+def exp_03( request ):
+    log.debug( '\n\nstarting exp_03()' )
+    context = {}
+    resp = render( request, 'mp_vl_app_templates/exp_03.html', context )
     return resp
 
 # ---------------------
