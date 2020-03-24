@@ -32,6 +32,7 @@ urlpatterns = [
     url( r'^react_experimentation_01/$', views.exp_01, name='exp_01_url' ),
     url( r'^react_experimentation_02/$', views.exp_02, name='exp_02_url' ),
     url( r'^react_experimentation_03/$', views.exp_03, name='exp_03_url' ),
+    url( r'^react_experimentation_04/$', views.exp_04, name='exp_04_url' ),
 
     url( r'^$', RedirectView.as_view(pattern_name='info_url') ),
 

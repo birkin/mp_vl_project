@@ -42,6 +42,12 @@ def exp_03( request ):
     resp = render( request, 'mp_vl_app_templates/exp_03.html', context )
     return resp
 
+def exp_04( request ):
+    log.debug( '\n\nstarting exp_04()' )
+    context = {}
+    resp = render( request, 'mp_vl_app_templates/exp_04.html', context )
+    return resp
+
 # ---------------------
 
 
