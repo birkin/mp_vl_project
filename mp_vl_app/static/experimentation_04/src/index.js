@@ -1,3 +1,9 @@
-const x = "this is a test";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-alert( x );
+ReactDOM.render(
+    <div>
+        <h1>This is JSX!!</h1>
+    </div>,
+    document.getElementById("root")
+)
