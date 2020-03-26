@@ -15,7 +15,16 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_module/,
-                use: ['babel-loader']
+                // use: ['babel-loader'],
+                // below is a change from the video, to get the react compilation to work
+                use: [
+                    {
+                      loader: 'babel-loader',
+                      options: {
+                        presets: ['@babel/react']
+                      }
+                    }
+                ]
             }
         ]
     },
