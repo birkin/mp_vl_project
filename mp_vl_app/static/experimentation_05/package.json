@@ -20,6 +20,9 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
+    "@jsonforms/core": "^2.2.3",
+    "@jsonforms/material-renderers": "^2.2.3",
+    "@jsonforms/react": "^2.2.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }
