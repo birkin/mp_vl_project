@@ -5,21 +5,59 @@ import datetime, json, logging, os, pprint, urllib.parse
 import django, pymongo
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
-from django.core.urlresolvers import reverse
+from django.core.handlers import wsgi  # just for type-annotation
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse  # was `from django.core.urlresolvers import reverse` -- deprecated
 from mp_vl_app import settings_app
 from mp_vl_app.lib import mongo_access
-from mp_vl_app.lib import views_version_helper, views_info_helper
 from mp_vl_app.lib import views_dblist_helper, views_api_entries_helper
 from mp_vl_app.lib import views_entry_helper
+from mp_vl_app.lib import views_version_helper, views_info_helper
 from mp_vl_app.lib.shib_auth import shib_login  # decorator
 
 
 log = logging.getLogger(__name__)
 
 
-def info( request: django.core.handlers.wsgi.WSGIRequest ):  # type-annotation just for reference
+# ---------------------
+# react experimentation
+# ---------------------
+
+def exp_01( request ):
+    log.debug( '\n\nstarting exp_01()' )
+    context = { 'name_value': request.GET.get( 'name', None ) }
+    resp = render( request, 'mp_vl_app_templates/exp_01.html', context )
+    return resp
+
+def exp_02( request ):
+    log.debug( '\n\nstarting exp_02()' )
+    context = {}
+    resp = render( request, 'mp_vl_app_templates/exp_02.html', context )
+    return resp
+
+def exp_03( request ):
+    log.debug( '\n\nstarting exp_03()' )
+    context = {}
+    resp = render( request, 'mp_vl_app_templates/exp_03.html', context )
+    return resp
+
+def exp_04( request ):
+    log.debug( '\n\nstarting exp_04()' )
+    context = {}
+    resp = render( request, 'mp_vl_app_templates/exp_04.html', context )
+    return resp
+
+def exp_05( request ):
+    log.debug( '\n\nstarting exp_05()' )
+    context = {}
+    resp = render( request, 'mp_vl_app_templates/exp_05.html', context )
+    return resp
+
+# ---------------------
+
+
+def info( request: wsgi.WSGIRequest ):  # type-annotation just for reference
     """ Displays home page. """
     log.debug( '\n\nstarting info()' )
     log.debug( f'session, ```{request.session.items()}```' )
@@ -114,8 +152,12 @@ def api_entries( request ):
 def api_entry( request, id ):
     """ Returns json for given entry.
         Called by views.entry() """
-    jsn = json.dumps( { 'foo': 'bar' } )
-    return HttpResponse( jsn, content_type='application/json; charset=utf-8' )
+    log.debug( '\n\nstarting api_entry()' )
+    entry_query = mongo_access.query_entry( id, request )
+    entry_jsn = views_api_entry_helper.massage_doc( entry_query )
+    # entry_jsn = json.dumps( { 'foo': 'bar' } )
+    log.debug( 'returning entry_jsn response' )
+    return HttpResponse( entry_jsn, content_type='application/json; charset=utf-8' )
 
 
 # ===========================
