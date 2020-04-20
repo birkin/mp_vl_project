@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
-import { 
+import {
   AppBar,
   Container,
   Hidden,
@@ -217,7 +217,7 @@ class App extends React.Component {
               </Switch>
             )}
           />
-          </Container>       
+          </Container>
       </ConnectedRouter>
     );
   }
