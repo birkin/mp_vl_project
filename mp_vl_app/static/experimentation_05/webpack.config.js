@@ -19,10 +19,13 @@ module.exports = {
                 // below is a change from the video, to get the react compilation to work
                 use: [
                     {
-                      loader: 'babel-loader',
-                      options: {
-                        presets: ['@babel/react']
-                      }
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['@babel/react'],
+                            plugins: [ '@babel/plugin-proposal-class-properties' ]
+                        },
+
+
                     }
                 ]
             },
