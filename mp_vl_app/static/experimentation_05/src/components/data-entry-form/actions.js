@@ -144,10 +144,10 @@ const deleteEntrySuccess = (id) => ({
     },
 });
 
-const jsonformsInit = (schema, uischema) => 
+const jsonformsInit = (schema, uischema) =>
     JSONFormsActions.init({}, schema, uischema);
 
-const setJsonformsData = (data) => 
+const setJsonformsData = (data) =>
     JSONFormsActions.update('', () => data);
 
 export {

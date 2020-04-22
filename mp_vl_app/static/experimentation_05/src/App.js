@@ -159,7 +159,8 @@ class App extends React.Component {
             // dataUrl={process.env.REACT_APP_API_DATA_LOCATION}
             // schemaUrl={process.env.REACT_APP_API_SCHEMA_LOCATION}
             // uischemaUrl={process.env.REACT_APP_API_UI_SCHEMA_LOCATION}
-            dataUrl="https://foo_A.edu/"
+            // dataUrl="https://foo_A.edu/"
+            dataUrl="http://127.0.0.1:8000/api/entries/"
             schemaUrl="https://foo_B.edu/"
             uischemaUrl="https://foo_C.edu/"
             render={(defProps) => (
