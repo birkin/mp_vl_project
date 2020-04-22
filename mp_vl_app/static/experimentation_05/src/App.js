@@ -68,7 +68,7 @@ class App extends React.Component {
       ],
     }
 
-    this.login = this.login.bind(this);
+    // this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
   }
 
@@ -82,13 +82,17 @@ class App extends React.Component {
             "X-Auth-Token": token
         }
     }).then(response => {
-        if (response.status === 401 || response.status === 403) {
+        // if (response.status === 401 || response.status === 403) {
+        console.log( "response.status, ", response.status );
+        if (1 === 2) {
             alert("Incorrect creditials")
         } else {
             Cookies.remove('auth-token');
             Cookies.set('auth-token', token, {domain: "localhost"})
             Cookies.set('auth-token', token, {domain: "mappingviolence.org"})
-            window.location = "/";
+            Cookies.set('auth-token', token, {domain: "127.0.0.1:8000"})
+            // window.location = "/";
+            window.location = "/react_experimentation_05/";
         }
     });
   }
@@ -99,13 +103,13 @@ class App extends React.Component {
   }
 
   render() {
-    if (!this.props.user) {
-      return <>
-        User ID: <input id="userid" />
-        Password: <input id="password" type="password" />
-        <button onClick={this.login}>Submit</button>
-      </>
-    }
+    // if (!this.props.user) {
+    //   return <>
+    //     User ID: <input id="userid" />
+    //     Password: <input id="password" type="password" />
+    //     <button onClick={this.login}>Submit</button>
+    //   </>
+    // }
     return (
       <ConnectedRouter history={history}>
         <AppBar className={this.props.classes.appbar} position="static">
@@ -152,9 +156,12 @@ class App extends React.Component {
         </AppBar>
         <Container className={this.props.classes.container}>
           <DataEntryForm
-            dataUrl={process.env.REACT_APP_API_DATA_LOCATION}
-            schemaUrl={process.env.REACT_APP_API_SCHEMA_LOCATION}
-            uischemaUrl={process.env.REACT_APP_API_UI_SCHEMA_LOCATION}
+            // dataUrl={process.env.REACT_APP_API_DATA_LOCATION}
+            // schemaUrl={process.env.REACT_APP_API_SCHEMA_LOCATION}
+            // uischemaUrl={process.env.REACT_APP_API_UI_SCHEMA_LOCATION}
+            dataUrl="https://foo_A.edu/"
+            schemaUrl="https://foo_B.edu/"
+            uischemaUrl="https://foo_C.edu/"
             render={(defProps) => (
               <Switch>
                 <Route
