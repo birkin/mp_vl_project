@@ -1,4 +1,4 @@
-import logging, os, pprint, urllib.parse
+import bson, logging, os, pprint, urllib.parse
 
 import pymongo
 from django.conf import settings as project_settings
@@ -27,6 +27,7 @@ def query_entries( connect_str: str ) -> pymongo.cursor.Cursor:  # or None
     """ Returns entries for full listing page.
         NB: Because `entries_query` is a pymongo-cursor, applying a slice would act as a filter to the variable itself, not to a copy, as may be expected.
         Called by views.api_entries(), which is accessed by views.db_list() """
+    log.debug( 'starting query_entries()' )
     entries_query = None
     try:
         m_client: pymongo.mongo_client.MongoClient = pymongo.MongoClient( connect_str )
@@ -37,34 +38,59 @@ def query_entries( connect_str: str ) -> pymongo.cursor.Cursor:  # or None
         log.exception( 'problem accessing mongo' )
         pass
     # log.debug( f'entries_query (first 10), ```{pprint.pformat(entries_query[0:10])}```...' )  # NB! - this would cause entries_query to only contain 10 items!
+    log.debug( f'returning entries_query' )
     return entries_query
 
 
-def query_entry( id: str, request ) -> pymongo.cursor.Cursor:  # or None
+def query_entry( id: str, request ) -> dict:  # could be {}
     """ Returns entry.
         Called by views.api_entry(), accessed by views.entry() """
     log.debug( 'starting query_entry' )
-    from pymongo import ObjectId
-    log.debug( 'import ok' )
     connect_str: str = prep_connect_str( request )
-    entry_query = None
+    doc = {}
+    log.debug( 'starting try' )
     try:
-        log.debug( 'starting try' )
         m_client: pymongo.mongo_client.MongoClient = pymongo.MongoClient( connect_str )
         m_db: pymongo.database.Database = m_client[settings_app.DB_NAME]
         m_collection: pymongo.collection.Collection = m_db[settings_app.DB_ENTRIES]
-        q = { '_id': ObjectId( id ) }
-        # q = { 'latitude': 26.492979 }
+        q = { '_id': bson.ObjectId( id ) }
         entry_query: pymongo.cursor.Cursor = m_collection.find( q )  # the cursor will return all entries when accessed
-        ## temp
         log.debug( 'about to start loop' )
-        for doc in entry_query:
-            log.debug( f'doc, ```{doc}```' )
+        for entry in entry_query:
+            log.debug( f'entry, ```{entry}```' )
+            log.debug( f'type(entry), ``{type(entry)}``' )
+            doc = entry
+            break
     except:
         log.exception( 'problem accessing mongo' )
         raise Exception( 'failure' )
-    log.debug( f'entry_query, ```{pprint.pformat(entry_query.__dict__)}```' )
-    return entry_query
+    log.debug( f'doc, ```{pprint.pformat(doc)}```' )
+    return doc
+
+
+# def query_entry( id: str, request ) -> pymongo.cursor.Cursor:  # or None
+#     """ Returns entry.
+#         Called by views.api_entry(), accessed by views.entry() """
+#     log.debug( 'starting query_entry' )
+#     connect_str: str = prep_connect_str( request )
+#     entry_query = None
+#     log.debug( 'starting try' )
+#     try:
+#         m_client: pymongo.mongo_client.MongoClient = pymongo.MongoClient( connect_str )
+#         m_db: pymongo.database.Database = m_client[settings_app.DB_NAME]
+#         m_collection: pymongo.collection.Collection = m_db[settings_app.DB_ENTRIES]
+#         q = { '_id': ObjectId( id ) }
+#         # q = { 'latitude': 26.492979 }
+#         entry_query: pymongo.cursor.Cursor = m_collection.find( q )  # the cursor will return all entries when accessed
+#         ## temp
+#         log.debug( 'about to start loop' )
+#         for doc in entry_query:
+#             log.debug( f'doc, ```{doc}```' )
+#     except:
+#         log.exception( 'problem accessing mongo' )
+#         raise Exception( 'failure' )
+#     log.debug( f'entry_query, ```{pprint.pformat(entry_query.__dict__)}```' )
+#     return entry_query
 
 
 # ----------------------------------
