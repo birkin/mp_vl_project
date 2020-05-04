@@ -1,6 +1,6 @@
-import bson, logging, os, pprint, urllib.parse
+import logging, os, pprint, urllib.parse
 
-import pymongo
+import bson, pymongo  # I think bson is installed when pymongo is installed; it does not show up in `pip freeze`.
 from django.conf import settings as project_settings
 from mp_vl_app import settings_app
 
