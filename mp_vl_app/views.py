@@ -43,7 +43,7 @@ def db_list( request ):
     log.debug( '\n\nstarting db_list()' )
     ( scheme, host, start_time ) = (
         request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), datetime.datetime.now() )  # scheme: str, host: str, start_time: datetime.datetime
-    context: dict = views_dblist_helper.build_data( scheme, host, request.user, start_time )  # request.user: django.utils.functional.SimpleLazyObject
+    context: dict = views_dblist_helper.build_data( scheme, host, request.user, start_time )  # request.user: django.utils.functional.SimpleLazyObject<django.contrib.auth.models.User>
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
@@ -59,7 +59,7 @@ def entry( request, id: str ):
     # return HttpResponse( '<p>entry info coming</p>' )
     ( scheme, host, start_time ) = (
         request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), datetime.datetime.now() )  # scheme: str, host: str, start_time: datetime.datetime
-    context: dict = views_entry_helper.build_get_data( id, scheme, host, request.user, start_time )  # request.user: django.utils.functional.SimpleLazyObject
+    context: dict = views_entry_helper.build_get_data( id, scheme, host, request.user, start_time )  # request.user: django.utils.functional.SimpleLazyObject<django.contrib.auth.models.User>
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
@@ -119,8 +119,10 @@ def api_entry( request, id ):
         log.debug( '\n\nstarting api_entry()' )
         doc: dict = mongo_access.query_entry( id, request )
         massaged_doc: dict = views_api_entries_helper.massage_doc_data( doc )
+        log.debug( f'massaged_doc, ```{pprint.pformat(massaged_doc)}```' )
         entry_jsn = json.dumps( massaged_doc, sort_keys=True, indent=2 )
-        log.debug( 'returning entry_jsn response' )
+        # log.debug( 'returning entry_jsn response' )
+        log.debug( f'entry_jsn, ```{entry_jsn}```' )
     except:
         log.exception( 'problem with api_entry()' )
     return HttpResponse( entry_jsn, content_type='application/json; charset=utf-8' )
