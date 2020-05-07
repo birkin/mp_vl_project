@@ -9,6 +9,12 @@ Mapping Violence Entry
 
 {% block page_css %}
 <style type="text/css">
+    span.not_provided {
+        color: red;
+    }
+    p#time_place_summary {
+        font-style: italic;
+    }
 </style>
 {% endblock page_css %}
 
@@ -19,8 +25,88 @@ Mapping Violence Entry
 
 <div class="MuiContainer-root jss4 MuiContainer-maxWidthLg">
 
-    <h1 id="page_title">Entry</h1>
-    <p>data coming</p>
+    <h1 id="page_title">{{ data.title }}</h1>
+
+    <p id="event_category">
+        Event type: {% if data.eventCategory %}{{ data.eventCategory }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
+
+    <p id="time_place_summary">
+        Time/Place summary: {{ data.date_display }} - {% if data.location %}{{ data.location }} {% else %} <span class="not_provided">location not-provided</span> {% endif %}
+    </p>
+
+    <p id="description">
+        Description: {{ data.description }}
+    </p>
+
+    <hr/>
+
+    <h2>Location</h2>
+
+    <p id="place">
+        Place : {% if data.location %}{{ data.location }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
+
+    <p id="coordinates">
+        Coordinates (lat, lng): ( {{ data.latitude }}, {{ data.longitude }} )
+    </p>
+
+    <p id="rationale">
+        Rationale: {{ data.locationRationale }}
+    </p>
+
+    <hr/>
+
+    <h2 id="victims">Victims</h2>
+
+    <table class="MuiTable-root">
+        <thead class="MuiTableHead-root">
+            <tr class="MuiTableRow-root MuiTableRow-head">
+                <th class="MuiTableCell-root jss138 MuiTableCell-head" scope="col">name</th>
+                <th class="MuiTableCell-root jss138 MuiTableCell-head" scope="col">race</th>
+                <th class="MuiTableCell-root jss138 MuiTableCell-head" scope="col">ethnicity</th>
+                <th class="MuiTableCell-root jss138 MuiTableCell-head" scope="col">nationality</th>
+                <th class="MuiTableCell-root jss138 MuiTableCell-head" scope="col">gender</th>
+                <th class="MuiTableCell-root jss138 MuiTableCell-head" scope="col">martialStatus</th>
+                <th class="MuiTableCell-root jss138 MuiTableCell-head" scope="col">occupation</th>
+                <th class="MuiTableCell-root jss138 MuiTableCell-head" scope="col">age</th>
+                <th class="MuiTableCell-root jss138 MuiTableCell-head" scope="col">literacy</th>
+            </tr>
+        </thead>
+        {% for victim in data.victims %}
+        <tbody class="MuiTableBody-root">
+            <tr class="MuiTableRow-root">
+                <td class="MuiTableCell-root MuiTableCell-body">{{ victim.name }}</td>
+                <td class="MuiTableCell-root MuiTableCell-body">{{ victim.race|join:" , " }}</td>
+                <td class="MuiTableCell-root MuiTableCell-body">{{ victim.ethnicity|join:" , " }}</td>
+                <td class="MuiTableCell-root MuiTableCell-body">{{ victim.nationality }}</td>
+                <td class="MuiTableCell-root MuiTableCell-body">{{ victim.gender }}</td>
+                <td class="MuiTableCell-root MuiTableCell-body">{{ victim.maritalStatus }}</td>
+                <td class="MuiTableCell-root MuiTableCell-body">{{ victim.occupation }}</td>
+                <td class="MuiTableCell-root MuiTableCell-body">{{ victim.age }}</td>
+                <td class="MuiTableCell-root MuiTableCell-body">{{ victim.literacy }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p id="rationale">
+        Number of victims: {% if data.number_of_victims %}{{ data.number_of_victims }} {% else %} {{ data.victims|length }} above {% endif %}
+    </p>
+
+    <p id="rationale">
+        Victims Category: {% if data.victims_category %}{{ data.victims_category }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
+
+    <h2 id="aggressors">Aggressors</h2>
+
+    <p>--> HERE <--</p>
+
+
+    <hr/>
+
+
+
 
     <div class="data-pool">
     </div>  <!-- end <div class="data-pool"> -->
