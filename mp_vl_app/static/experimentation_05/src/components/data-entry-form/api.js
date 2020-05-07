@@ -1,10 +1,15 @@
 import { schema, uischema } from '../../example';
 
-const fetchData = async (url) => 
+
+const fetchData = async (url) =>
     await fetch(url, {
         credentials: 'include'
-    }).then(response => response.json())
-                    .catch(err => { return {error: true, message: err} });
+    }).then(response => response.json()).catch(
+        err => {
+            console.log( "url, ", url );
+            return {error: true, message: err}
+                }
+    );
 
 const fetchSchema = async (url) =>
     await schema;

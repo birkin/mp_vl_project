@@ -20,43 +20,6 @@ from mp_vl_app.lib.shib_auth import shib_login  # decorator
 log = logging.getLogger(__name__)
 
 
-# ---------------------
-# react experimentation
-# ---------------------
-
-def exp_01( request ):
-    log.debug( '\n\nstarting exp_01()' )
-    context = { 'name_value': request.GET.get( 'name', None ) }
-    resp = render( request, 'mp_vl_app_templates/exp_01.html', context )
-    return resp
-
-def exp_02( request ):
-    log.debug( '\n\nstarting exp_02()' )
-    context = {}
-    resp = render( request, 'mp_vl_app_templates/exp_02.html', context )
-    return resp
-
-def exp_03( request ):
-    log.debug( '\n\nstarting exp_03()' )
-    context = {}
-    resp = render( request, 'mp_vl_app_templates/exp_03.html', context )
-    return resp
-
-def exp_04( request ):
-    log.debug( '\n\nstarting exp_04()' )
-    context = {}
-    resp = render( request, 'mp_vl_app_templates/exp_04.html', context )
-    return resp
-
-def exp_05( request ):
-    log.debug( '\n\nstarting exp_05()' )
-    context = {}
-    resp = render( request, 'mp_vl_app_templates/exp_05.html', context )
-    return resp
-
-# ---------------------
-
-
 def info( request: wsgi.WSGIRequest ):  # type-annotation just for reference
     """ Displays home page. """
     log.debug( '\n\nstarting info()' )
@@ -80,7 +43,7 @@ def db_list( request ):
     log.debug( '\n\nstarting db_list()' )
     ( scheme, host, start_time ) = (
         request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), datetime.datetime.now() )  # scheme: str, host: str, start_time: datetime.datetime
-    context: dict = views_dblist_helper.build_data( scheme, host, request.user, start_time )  # request.user: django.utils.functional.SimpleLazyObject
+    context: dict = views_dblist_helper.build_data( scheme, host, request.user, start_time )  # request.user: django.utils.functional.SimpleLazyObject<django.contrib.auth.models.User>
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
@@ -96,7 +59,7 @@ def entry( request, id: str ):
     # return HttpResponse( '<p>entry info coming</p>' )
     ( scheme, host, start_time ) = (
         request.scheme, request.META.get('HTTP_HOST', '127.0.0.1'), datetime.datetime.now() )  # scheme: str, host: str, start_time: datetime.datetime
-    context: dict = views_entry_helper.build_get_data( id, scheme, host, request.user, start_time )  # request.user: django.utils.functional.SimpleLazyObject
+    context: dict = views_entry_helper.build_get_data( id, scheme, host, request.user, start_time )  # request.user: django.utils.functional.SimpleLazyObject<django.contrib.auth.models.User>
     if request.GET.get('format', '') == 'json':
         resp = HttpResponse( json.dumps(context, sort_keys=True, indent=2), content_type='application/javascript; charset=utf-8' )
     else:
@@ -152,12 +115,29 @@ def api_entries( request ):
 def api_entry( request, id ):
     """ Returns json for given entry.
         Called by views.entry() """
-    log.debug( '\n\nstarting api_entry()' )
-    entry_query = mongo_access.query_entry( id, request )
-    entry_jsn = views_api_entry_helper.massage_doc( entry_query )
-    # entry_jsn = json.dumps( { 'foo': 'bar' } )
-    log.debug( 'returning entry_jsn response' )
+    try:
+        log.debug( '\n\nstarting api_entry()' )
+        doc: dict = mongo_access.query_entry( id, request )
+        massaged_doc: dict = views_api_entries_helper.massage_doc_data( doc )
+        log.debug( f'massaged_doc, ```{pprint.pformat(massaged_doc)}```' )
+        entry_jsn = json.dumps( massaged_doc, sort_keys=True, indent=2 )
+        # log.debug( 'returning entry_jsn response' )
+        log.debug( f'entry_jsn, ```{entry_jsn}```' )
+    except:
+        log.exception( 'problem with api_entry()' )
     return HttpResponse( entry_jsn, content_type='application/json; charset=utf-8' )
+
+
+# @shib_login
+# def api_entry( request, id ):
+#     """ Returns json for given entry.
+#         Called by views.entry() """
+#     log.debug( '\n\nstarting api_entry()' )
+#     entry_query = mongo_access.query_entry( id, request )
+#     entry_jsn = views_api_entry_helper.massage_doc( entry_query )
+#     # entry_jsn = json.dumps( { 'foo': 'bar' } )
+#     log.debug( 'returning entry_jsn response' )
+#     return HttpResponse( entry_jsn, content_type='application/json; charset=utf-8' )
 
 
 # ===========================
@@ -189,6 +169,43 @@ def error_check( request ):
         1/0
     else:
         return HttpResponseNotFound( '<div>404 / Not Found</div>' )
+
+
+# ===========================
+# react experimentation
+# ===========================
+
+def exp_01( request ):
+    log.debug( '\n\nstarting exp_01()' )
+    context = { 'name_value': request.GET.get( 'name', None ) }
+    resp = render( request, 'mp_vl_app_templates/exp_01.html', context )
+    return resp
+
+def exp_02( request ):
+    log.debug( '\n\nstarting exp_02()' )
+    context = {}
+    resp = render( request, 'mp_vl_app_templates/exp_02.html', context )
+    return resp
+
+def exp_03( request ):
+    log.debug( '\n\nstarting exp_03()' )
+    context = {}
+    resp = render( request, 'mp_vl_app_templates/exp_03.html', context )
+    return resp
+
+def exp_04( request ):
+    log.debug( '\n\nstarting exp_04()' )
+    context = {}
+    resp = render( request, 'mp_vl_app_templates/exp_04.html', context )
+    return resp
+
+def exp_05( request ):
+    log.debug( '\n\nstarting exp_05()' )
+    context = {}
+    resp = render( request, 'mp_vl_app_templates/exp_05.html', context )
+    return resp
+
+# ---------------------
 
 
 # @shib_login
