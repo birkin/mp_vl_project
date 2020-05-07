@@ -67,6 +67,11 @@ def process_data( raw_data: list ):
         Called by build_get_data() """
     log.debug( f'raw_data, ``{pprint.pformat(raw_data)}``' )
     data = raw_data.copy()
+    summary_data = 'summary-line unavailable'
+    if data.get( 'entryCategory' ) != None:
+        summary_data = data['entryCategory']
+    else:
+        summary_data = data.get( 'date_display' )
+    data['summary_first_line'] = summary_data
     log.debug( f'processed-data, ``{pprint.pformat(data)}``' )
-
     return data

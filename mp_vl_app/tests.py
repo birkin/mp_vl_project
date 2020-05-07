@@ -7,6 +7,7 @@ from django.test import TestCase
 
 
 log = logging.getLogger(__name__)
+log.debug( 'logging ready' )
 TestCase.maxDiff = None
 
 
@@ -33,15 +34,23 @@ class RootUrlTest( TestCase ):
 class EntryTest( TestCase ):
     """ Checks entry-data construction. """
 
-    from mp_vl_app.lib import views_entry_helper as helper
-
     def test_short_top_summary(self):
         """ Checks first line. """
+        from mp_vl_app.lib import views_entry_helper as helper
         for (i, entry) in enumerate( json.loads( ENTRY_TEST_JSON ) ):
+            log.debug( f'i, ``{i}``; entry-title, ``{entry["title"]}``' )
             if i == 0:
-                self.assertEqual( 'Racial Violence', helper.process_data(entry[i])['summary_first_line'] )
+                log.debug( 'i is 0' )
+                self.assertEqual( 'Racial Violence', helper.process_data(entry)['summary_first_line'] )
             elif i == 1:
-                self.assertEqual( '1919 April 8', helper.process_data(entry[i])['summary_first_line'] )
+                self.assertEqual( '1919 April 8', helper.process_data(entry)['summary_first_line'] )
+
+            elif i == 2:
+                self.assertEqual( '1919 April 8', helper.process_data(entry)['summary_first_line'] )
+            elif i == 3:
+                self.assertEqual( '1919 April 8', helper.process_data(entry)['summary_first_line'] )
+            elif i == 4:
+                self.assertEqual( '1919 April 8', helper.process_data(entry)['summary_first_line'] )
 
     ## end class EntryTest()
 
@@ -123,7 +132,8 @@ ENTRY_TEST_JSON = """
         "race": []
       }
     ]
-  }
+  },
+  {"_id": "57a24820f70fce2911f7ab85", "aggressors": [], "date": {"day": 29, "month": 7.0, "year": 1915}, "date_display": "1915 July 29", "description": "On July 29, 1916, Sheriff Frank Carr and Ranger Daniel Hinojosa arrested Rodolfo Mu\\u00f1oz (also referred to as Adolfo Mu\\u00f1oz or Rudolfo Mu\\u00f1iz) in San Benito after local farmers accused him of membership in a local gang. \\n\\n\\nAfter Carr and Hinojosa took Mu\\u00f1oz into police custody, they transported Mu\\u00f1oz to the county jail in Brownsville under the cover of night. The next morning, Mu\\u00f1oz\\u2019s body was found riddled with bullets and hanging from a tree on the road between San Benito and Brownsville. At the time of his death, Mu\\u00f1oz had not yet been charged with a single crime. \\n\\n\\nCarr and Hinojosa claimed that a group of eight armed masked men had stopped the car on the way to the county jail, forced Mu\\u00f1oz out of police custody, and lynched him. Some sources claim that Carr and Hinojosa had killed Mu\\u00f1oz themselves and fabricated the lynching to escape responsibility. \\n\\n\\nAfterwards, the story of the lynching caused ethnic Mexican suspects to refuse to cooperate with law enforcement for fear that they too would be killed without due process. \\n\\n\\n", "id_clean": "57a24820f70fce2911f7ab85", "is_old_id": 1.0, "latitude": 25.907467, "locationRationale": "This is the site of what google calls the \\"Old County Jail.\\" It\'s likely where the officers were supposed to bring Mu\\u00f1oz. I chose this location rather than a spot along the road because this location is more certain.", "longitude": -97.49497, "metadata": {"lastEditedAt": "2019-06-13 14:42:17.906000", "lastEditedBy": "57a02348f70fce7140d3067a"}, "primarySources": ["\\u201cBorder justice is quick and certain: Masked men take Mexican from officer and lynch him to nearby tree.\\u201d The Daily Bulletin. (Brownwood, TX), July 29, 1915, p. 1.", "\\u201cMasked men hold up Deputy Sheriff near Brownsville, with rifles.\\u201d San Antonio Light. (San Antonio, TX), July 29, 1915, p. 1.", "\\u201cMob takes man from Deputy and lynch him.\\u201d The Daily Advocate. (Victoria, TX), July 30, 1915, p. 4.", "Pierce, Frank Cushman. A Brief History of the Lower Rio Grande Valley. George Banta publishing Company, 1917, p. 90.", "\\u201cProceedings of the Joint Committee of the Senate and the House in the Investigation of the Texas State Ranger Force,"], "secondarySources": ["Carrigan, William D., and Clive Webb. *Forgotten Dead: Mob Violence against Mexicans in the United States*, 1848-1928. 1 edition. Oxford: Oxford University Press, 2013, appendix A.", "Johnson, Benjamin Heber. *Revolution in Texas: How a Forgotten Rebellion and Its Bloody Suppression Turned Mexicans into Americans.* New Haven: Yale University Press, 2005, p. 86-7.", "Weber, John William III. ", "Ribb, Richard. \\u201cLa Rinchada: Revolution, Revenge, and the Rangers, 1910-1920.\\u201d In *War along the Border: The Mexican Revolution and Tejano Communities*, edited by Arnoldo de Le\\u00f3n, 56-106. College Station: Texas A&M University Press, 2012, p. 68, 118."], "status": "IN_POOL", "title": "Lynching of Rodolfo Mu\\u00f1oz in San Benito, 1915", "victims": [{"ethnicity": ["Mexican"], "gender": "Male", "name": "Rodolfo Mu\\u00f1oz", "nationality": "United States ", "race": []}]}
 ]
 """
 
@@ -166,7 +176,7 @@ ENTRY_TEST_JSON = """
 #       "year": 1919
 #     },
 #     "date_display": "1919 April 8",
-#     "description": "In 1919, Concepcion García, a Mexican national, was living in Texas in order to attend school. That same year, Lt. Robert L. Gulley of the US Cavalry patrolled the US-Mexico border. Concepcion became ill, and attempted to return home on April 8. While crossing the river back to Mexico on a raft, the young girl, her mother Maria, and her aunt found themselves under fire. Lt. Gulley shot at the group killing Concepcion.  The lieutenant’s firing at an unarmed group necessitated an investigation, and on April 28, 1919, a court-martial tried and sentenced Lt. Gulley, dismissing him from military service. However, President Woodrow Wilson, reversed the findings and restored him to duty in September 1919. \nTeodoro García and Maria Apolinar Garza charged the United States with the wrongful death of their daughter and denial of justice. Hearing the case on December 3, 1926, the US-Mexico General Claims Commission found that states should be punished for “such offenses as unnecessary shooting across the border without authority.”  The commission obligated the US government to pay an indemnity of $2,000 without interest on behalf of Teodoro García and Maria Apolinar García. This case is just one of relatives receiving indemnities from the United States government for the wrongful death of their relatives and denial of justice.\n",
+#     "description": "In 1919, Concepcion García, a Mexican national, was living in Texas in order to attend school. That same year, Lt. Robert L. Gulley of the US Cavalry patrolled the US-Mexico border. Concepcion became ill, and attempted to return home on April 8. While crossing the river back to Mexico on a raft, the young girl, her mother Maria, and her aunt found themselves under fire. Lt. Gulley shot at the group killing Concepcion.  The lieutenant’s firing at an unarmed group necessitated an investigation, and on April 28, 1919, a court-martial tried and sentenced Lt. Gulley, dismissing him from military service. However, President Woodrow Wilson, reversed the findings and restored him to duty in September 1919. \\nTeodoro García and Maria Apolinar Garza charged the United States with the wrongful death of their daughter and denial of justice. Hearing the case on December 3, 1926, the US-Mexico General Claims Commission found that states should be punished for “such offenses as unnecessary shooting across the border without authority.”  The commission obligated the US government to pay an indemnity of $2,000 without interest on behalf of Teodoro García and Maria Apolinar García. This case is just one of relatives receiving indemnities from the United States government for the wrongful death of their relatives and denial of justice.\\n",
 #     "id_clean": "5a51180308813b00015f7454",
 #     "is_old_id": 1.0,
 #     "latitude": 26.235715,
@@ -215,11 +225,11 @@ ENTRY_TEST_JSON = """
 #       "year": 1915
 #     },
 #     "date_display": "1915 July 29",
-#     "description": "On July 29, 1916, Sheriff Frank Carr and Ranger Daniel Hinojosa arrested Rodolfo Muñoz (also referred to as Adolfo Muñoz or Rudolfo Muñiz) in San Benito after local farmers accused him of membership in a local gang. \n\n\nAfter Carr and Hinojosa took Muñoz into police custody, they transported Muñoz to the county jail in Brownsville under the cover of night. The next morning, Muñoz’s body was found riddled with bullets and hanging from a tree on the road between San Benito and Brownsville. At the time of his death, Muñoz had not yet been charged with a single crime. \n\n\nCarr and Hinojosa claimed that a group of eight armed masked men had stopped the car on the way to the county jail, forced Muñoz out of police custody, and lynched him. Some sources claim that Carr and Hinojosa had killed Muñoz themselves and fabricated the lynching to escape responsibility. \n\n\nAfterwards, the story of the lynching caused ethnic Mexican suspects to refuse to cooperate with law enforcement for fear that they too would be killed without due process. \n\n\n",
+#     "description": "On July 29, 1916, Sheriff Frank Carr and Ranger Daniel Hinojosa arrested Rodolfo Muñoz (also referred to as Adolfo Muñoz or Rudolfo Muñiz) in San Benito after local farmers accused him of membership in a local gang. \\n\\n\\nAfter Carr and Hinojosa took Muñoz into police custody, they transported Muñoz to the county jail in Brownsville under the cover of night. The next morning, Muñoz’s body was found riddled with bullets and hanging from a tree on the road between San Benito and Brownsville. At the time of his death, Muñoz had not yet been charged with a single crime. \\n\\n\\nCarr and Hinojosa claimed that a group of eight armed masked men had stopped the car on the way to the county jail, forced Muñoz out of police custody, and lynched him. Some sources claim that Carr and Hinojosa had killed Muñoz themselves and fabricated the lynching to escape responsibility. \\n\\n\\nAfterwards, the story of the lynching caused ethnic Mexican suspects to refuse to cooperate with law enforcement for fear that they too would be killed without due process. \\n\\n\\n",
 #     "id_clean": "57a24820f70fce2911f7ab85",
 #     "is_old_id": 1.0,
 #     "latitude": 25.907467,
-#     "locationRationale": "This is the site of what google calls the \"Old County Jail.\" It's likely where the officers were supposed to bring Muñoz. I chose this location rather than a spot along the road because this location is more certain.",
+#     "locationRationale": "This is the site of what google calls the \\"Old County Jail.\\" It's likely where the officers were supposed to bring Muñoz. I chose this location rather than a spot along the road because this location is more certain.",
 #     "longitude": -97.49497,
 #     "metadata": {
 #       "lastEditedAt": "2019-06-13 14:42:17.906000",
@@ -305,7 +315,7 @@ ENTRY_TEST_JSON = """
 #     "id_clean": "57a01e90f70fce7140d30675",
 #     "is_old_id": 1.0,
 #     "latitude": 26.064854,
-#     "locationRationale": "Event reported as happening near the border along the Progreso River Banks by primary sources.\nUpdate (Nnamdi)\nFrom the Museum of South Texas History and a dissertation from 1983, I found a map and some other information indicating the location of the event, as described happening at Mercedes Pump. Mercedes Pump was apparently 2 and a half miles up the Rio Grande in a town now called Rio Rico.  Mercedes Pump was apparently next to a bridge, the Rio Rico Bridge, which was demolished as of 1941. The town of Rio Rico, in modern day Progreso near Mercedes as well, does not exist anymore. The map from the dissertation gives me the grooves of where the pump was, but I am still a bit confused as to where it is exactly. I perhaps wanted to check with Felicia and Professor Martinez first to see where they think. ",
+#     "locationRationale": "Event reported as happening near the border along the Progreso River Banks by primary sources.\\nUpdate (Nnamdi)\nFrom the Museum of South Texas History and a dissertation from 1983, I found a map and some other information indicating the location of the event, as described happening at Mercedes Pump. Mercedes Pump was apparently 2 and a half miles up the Rio Grande in a town now called Rio Rico.  Mercedes Pump was apparently next to a bridge, the Rio Rico Bridge, which was demolished as of 1941. The town of Rio Rico, in modern day Progreso near Mercedes as well, does not exist anymore. The map from the dissertation gives me the grooves of where the pump was, but I am still a bit confused as to where it is exactly. I perhaps wanted to check with Felicia and Professor Martinez first to see where they think. ",
 #     "longitude": -97.969925,
 #     "metadata": {
 #       "lastEditedAt": "2019-06-20 21:42:14.419000",
