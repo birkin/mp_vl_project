@@ -23,7 +23,7 @@ log = logging.getLogger(__name__)
 def shib_login(func):
     """ Decorator to create a user object for the Shib user, if necessary, and log the user into Django.
         Called by views.py decorators. """
-    log.debug( 'starting shib_login() decorator' )
+    # log.debug( 'starting shib_login() decorator' )
     def decorator(request, *args, **kwargs):
         log.debug( '\n\nstarting shib_login() decorator sub-function' )
         # log.debug( f'request.META, ```{pprint.pformat(request.META)}```' )

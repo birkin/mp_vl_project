@@ -180,8 +180,8 @@ LOGGING = {
             'propagate': False,
             },
         'mp_vl_app': {
-            # 'handlers': ['logfile', 'console'],  # leaving here as reminder that this is how to show output in the terminal
-            'handlers': ['logfile'],
+            'handlers': ['logfile', 'console'],  # leaving here as reminder that this is how to show output in the terminal
+            # 'handlers': ['logfile'],
             'level': os.environ.get(u'MV_DJ__LOG_LEVEL'),
             'propagate': False
         },
