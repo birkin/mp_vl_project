@@ -99,7 +99,6 @@ def logout( request ):
 # ===========================
 
 
-@shib_login
 def api_entries( request ):
     """ Returns json for entries.
         Currently used by views.db_list() """
@@ -111,7 +110,6 @@ def api_entries( request ):
     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
 
 
-@shib_login
 def api_entry( request, id ):
     """ Returns json for given entry.
         Called by views.entry() """
