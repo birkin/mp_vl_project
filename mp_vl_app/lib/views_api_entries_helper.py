@@ -29,7 +29,7 @@ def massage_docs( entries_query: pymongo.cursor.Cursor ) -> str:
 def massage_doc_data( doc: dict ) -> dict:
     """ Updates doc data so it can be jsonized.
         Called by massage_docs() """
-    log.debug( f'initial doc, ```{pprint.pformat(doc)}```' )
+    # log.debug( f'initial doc, ```{pprint.pformat(doc)}```' )
     doc['_id'] = str( doc['_id'] )
     doc['id_clean'] = str( doc['_id'] )  # so template can access this key
     if doc.get( 'date', None ):

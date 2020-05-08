@@ -8,6 +8,7 @@
     - enable settings in settings_app.py """
 
 import copy, json, logging, os, pprint
+from urllib.parse import urlparse
 
 from django.conf import settings as project_settings
 from django.contrib.auth import authenticate, get_backends, login
@@ -20,24 +21,58 @@ from mp_vl_app import settings_app
 log = logging.getLogger(__name__)
 
 
+# def shib_login(func):
+#     """ Decorator to create a user object for the Shib user, if necessary, and log the user into Django.
+#         Called by views.py decorators. """
+#     # log.debug( 'starting shib_login() decorator' )
+#     def decorator(request, *args, **kwargs):
+#         log.debug( '\n\nstarting shib_login() decorator sub-function' )
+#         # log.debug( f'request.META, ```{pprint.pformat(request.META)}```' )
+#         log.debug( f'coming from, ```{request.META.get("HTTP_REFERER", "referrer_unknown")}```' )
+#         log.debug( f'heading to, ```{request.META["PATH_INFO"]}```' )
+#         log.debug( f'authenticated?, ```{request.user.is_authenticated}```' )
+#         # log.debug( f'request.META, ```{pprint.pformat(request.META)}```' )
+#         # log.debug( f'request.META["PATH_INFO"], `{request.META["PATH_INFO"]}`' )
+#         host = request.META.get( 'HTTP_HOST', '127.0.0.1' )
+#         log.debug( f'host, `{host}`' )
+#         if request.user.is_authenticated == True:
+#             log.debug( 'user already logged in; skipping authentication' )
+#             pass
+#         elif ( request.META.get( 'PATH_INFO', 'xxxxx' )[0:5] == '/api/' ) and ( host in project_settings.ALLOWED_HOSTS ):
+#             log.debug( 'internal api call; skipping authentication' )
+#             pass
+#         else:
+#             log.debug( 'user not logged in; proceed w/shib-check' )
+#             hlpr = LoginDecoratorHelper()
+#             cleaned_meta_dct = hlpr.prep_shib_dct( request.META, request.get_host() )
+#             user_obj = hlpr.manage_usr_obj( request, cleaned_meta_dct )
+#             if not user_obj:
+#                 # return HttpResponseForbidden( '403 / Forbidden' )
+#                 request.session.flush()
+#                 request.session['problem_message'] = 'You must log-in to be able to use this site.'
+#                 redirect_url = reverse( 'info_url' )
+#                 log.debug( 'no user_obj, so redirecting back to info page, with `problem_message` in session' )
+#                 return HttpResponseRedirect( redirect_url )
+#         return func(request, *args, **kwargs)
+#     return decorator
+
+
 def shib_login(func):
     """ Decorator to create a user object for the Shib user, if necessary, and log the user into Django.
         Called by views.py decorators. """
     # log.debug( 'starting shib_login() decorator' )
     def decorator(request, *args, **kwargs):
         log.debug( '\n\nstarting shib_login() decorator sub-function' )
+        referer_url = request.META.get( 'HTTP_REFERER', 'referrer_unknown' )
         # log.debug( f'request.META, ```{pprint.pformat(request.META)}```' )
-        log.debug( f'coming from, ```{request.META.get("HTTP_REFERER", "referrer_unknown")}```' )
+        log.debug( f'coming from, ```{referer_url}```' )
         log.debug( f'heading to, ```{request.META["PATH_INFO"]}```' )
         log.debug( f'authenticated?, ```{request.user.is_authenticated}```' )
-        # log.debug( f'request.META, ```{pprint.pformat(request.META)}```' )
-        # log.debug( f'request.META["PATH_INFO"], `{request.META["PATH_INFO"]}`' )
-        host = request.META.get( 'HTTP_HOST', '127.0.0.1' )
-        log.debug( f'host, `{host}`' )
+        referrer_host = urlparse( referer_url ).netloc
         if request.user.is_authenticated == True:
             log.debug( 'user already logged in; skipping authentication' )
             pass
-        elif ( request.META.get( 'PATH_INFO', 'xxxxx' )[0:5] == '/api/' ) and ( host in project_settings.ALLOWED_HOSTS ):
+        elif ( request.META.get( 'PATH_INFO', 'xxxxx' )[0:5] == '/api/' ) and ( referrer_host in project_settings.ALLOWED_HOSTS ):
             log.debug( 'internal api call; skipping authentication' )
             pass
         else:
