@@ -18,34 +18,23 @@ def build_data( scheme: str, host: str, user: django.utils.functional.SimpleLazy
         Note: decision... I could make the api call return non-jsonized mongo data,
             and have this function process it, but I'm going to assume an api should directly return json,
             and so will handle the object-to-json conversion in views.api_entries() """
-    try:
-        log.debug( f'host, `{host}`' )
-
-        ## test...
-        version_url = f'{scheme}://{host}{reverse("version_url")}'
-        log.debug( f'version_url, ```{version_url}```' )
-        r = requests.get( version_url, timeout=10 )
-        log.debug( 'here for timestamp after version_url' )
-
-        api_url = f'{scheme}://{host}{reverse("api_entries_url")}'
-        log.debug( f'api_url, ```{api_url}```' )
-        r = requests.get( api_url, timeout=10 )
-        log.debug( 'here for timestamp' )
-        data: List(dict) = r.json()
-        context = { 'data': data }
-        username = None
-        if user.is_authenticated:  # `user` becomes `django.contrib.auth.models.User` or `...AnonymousUser`
-            username: str = user.first_name
-            context['logged_in'] = True
-            context['entry_url'] = settings_app.ENTRY_URL
-            context['entry_version_url'] = settings_app.ENTRY_VERSION_URL
-            context['new_entry_url'] = settings_app.NEW_ENTRY_URL
-        else:
-            context['logged_in'] = False
-        context['username'] = username
-        context['time_taken'] = str( datetime.datetime.now() - start_time )
-        log.debug( f'context.keys(), ```{pprint.pformat(context.keys())}```' )
-        return context
-    except Exception as e:
-        log.exception( f'problem building data; exception, ``{e}``; traceback follows' )
-        raise Exception( 'check logs' )
+    log.debug( f'host, `{host}`' )
+    api_url = f'{scheme}://{host}{reverse("api_entries_url")}'
+    log.debug( f'api_url, ```{api_url}```' )
+    r = requests.get( api_url, timeout=10 )
+    log.debug( 'here for timestamp' )
+    data: List(dict) = r.json()
+    context = { 'data': data }
+    username = None
+    if user.is_authenticated:  # `user` becomes `django.contrib.auth.models.User` or `...AnonymousUser`
+        username: str = user.first_name
+        context['logged_in'] = True
+        context['entry_url'] = settings_app.ENTRY_URL
+        context['entry_version_url'] = settings_app.ENTRY_VERSION_URL
+        context['new_entry_url'] = settings_app.NEW_ENTRY_URL
+    else:
+        context['logged_in'] = False
+    context['username'] = username
+    context['time_taken'] = str( datetime.datetime.now() - start_time )
+    log.debug( f'context.keys(), ```{pprint.pformat(context.keys())}```' )
+    return context

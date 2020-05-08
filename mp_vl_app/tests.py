@@ -30,27 +30,27 @@ class RootUrlTest( TestCase ):
     # end class RootUrlTest()
 
 
-class EntryTest( TestCase ):
-    """ Checks entry-data construction. """
+# class EntryTest( TestCase ):
+#     """ Checks entry-data construction. """
 
-    def test_short_top_summary(self):
-        """ Checks first line. """
-        from mp_vl_app.lib import views_entry_helper as helper
-        for (i, entry) in enumerate( SAMPLE_ENTRIES ):
-            log.debug( f'i, ``{i}``; entry-title, ``{entry["title"]}``' )
-            if i == 0:
-                log.debug( 'i is 0' )
-                self.assertEqual( 'Racial Violence', helper.process_data(entry)['summary_first_line'] )
-            elif i == 1:
-                self.assertEqual( '1919 April 8', helper.process_data(entry)['summary_first_line'] )
-            elif i == 2:
-                self.assertEqual( '1915 July 29', helper.process_data(entry)['summary_first_line'] )
-            elif i == 3:
-                self.assertEqual( '1922 June 23', helper.process_data(entry)['summary_first_line'] )
-            elif i == 4:
-                self.assertEqual( '1915 August 16', helper.process_data(entry)['summary_first_line'] )
+#     def test_short_top_summary(self):
+#         """ Checks first line. """
+#         from mp_vl_app.lib import views_entry_helper as helper
+#         for (i, entry) in enumerate( SAMPLE_ENTRIES ):
+#             log.debug( f'i, ``{i}``; entry-title, ``{entry["title"]}``' )
+#             if i == 0:
+#                 log.debug( 'i is 0' )
+#                 self.assertEqual( 'Racial Violence', helper.process_data(entry)['summary_first_line'] )
+#             elif i == 1:
+#                 self.assertEqual( '1919 April 8', helper.process_data(entry)['summary_first_line'] )
+#             elif i == 2:
+#                 self.assertEqual( '1915 July 29', helper.process_data(entry)['summary_first_line'] )
+#             elif i == 3:
+#                 self.assertEqual( '1922 June 23', helper.process_data(entry)['summary_first_line'] )
+#             elif i == 4:
+#                 self.assertEqual( '1915 August 16', helper.process_data(entry)['summary_first_line'] )
 
-    ## end class EntryTest()
+#     ## end class EntryTest()
 
 
 SAMPLE_ENTRIES = [
