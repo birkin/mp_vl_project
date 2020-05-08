@@ -38,6 +38,6 @@ def build_data( scheme: str, host: str, user: django.utils.functional.SimpleLazy
         context['time_taken'] = str( datetime.datetime.now() - start_time )
         log.debug( f'context.keys(), ```{pprint.pformat(context.keys())}```' )
         return context
-    except:
-        log.exception( 'problem building data; traceback follows' )
+    except Exception as e:
+        log.exception( f'problem building data; exception, ``{e}``; traceback follows' )
         raise Exception( 'check logs' )
