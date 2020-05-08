@@ -42,7 +42,8 @@ def massage_doc_data( doc: dict ) -> dict:
         if 'lastEditedBy' in doc['metadata'].keys():
             if type( doc['metadata']['lastEditedBy'] ) != str:
                 doc['metadata']['lastEditedBy'] = str( doc['metadata']['lastEditedBy'] )
-    log.debug( f'updated doc, ```{pprint.pformat(doc)}```' )
+    # log.debug( f'updated doc, ```{pprint.pformat(doc)}```' )
+    log.debug( 'returning updated doc' )
     return doc
 
 
