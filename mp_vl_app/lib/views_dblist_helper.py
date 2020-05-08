@@ -20,9 +20,16 @@ def build_data( scheme: str, host: str, user: django.utils.functional.SimpleLazy
             and so will handle the object-to-json conversion in views.api_entries() """
     try:
         log.debug( f'host, `{host}`' )
+
+        ## test...
+        version_url = f'{scheme}://{host}{reverse("version_url")}'
+        log.debug( f'version_url, ```{version_url}```' )
+        r = requests.get( version_url, timeout=10 )
+        log.debug( 'here for timestamp after version_url' )
+
         api_url = f'{scheme}://{host}{reverse("api_entries_url")}'
         log.debug( f'api_url, ```{api_url}```' )
-        r = requests.get( api_url, timeout=15 )
+        r = requests.get( api_url, timeout=10 )
         log.debug( 'here for timestamp' )
         data: List(dict) = r.json()
         context = { 'data': data }
