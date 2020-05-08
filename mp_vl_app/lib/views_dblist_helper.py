@@ -22,7 +22,8 @@ def build_data( scheme: str, host: str, user: django.utils.functional.SimpleLazy
         log.debug( f'host, `{host}`' )
         api_url = f'{scheme}://{host}{reverse("api_entries_url")}'
         log.debug( f'api_url, ```{api_url}```' )
-        r = requests.get( api_url, timeout=10 )
+        r = requests.get( api_url, timeout=15 )
+        log.debug( 'here for timestamp' )
         data: List(dict) = r.json()
         context = { 'data': data }
         username = None
