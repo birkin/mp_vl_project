@@ -42,7 +42,7 @@ def build_get_data( id: str, scheme: str, host: str, user: django.utils.function
     log.debug( f'host, `{host}`' )
     api_url = f'{scheme}://{host}{reverse( "api_entry_url", kwargs={"id":id} )}'
     log.debug( f'api_url, ```{api_url}```' )
-    r = requests.get( api_url )
+    r = requests.get( api_url, timeout=10 )
     raw_data: List(dict) = r.json()
     context = { 'data': raw_data }
     # context = { 'db_data': raw_data, 'data': process_data(raw_data) }
