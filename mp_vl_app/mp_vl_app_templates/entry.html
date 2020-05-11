@@ -27,35 +27,39 @@ Mapping Violence Entry
 
     <h1 id="page_title">{{ data.title }}</h1>
 
-    <p id="event_category">
+    <p>
         Event type: {% if data.eventCategory %}{{ data.eventCategory }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
     </p>
 
-    <p id="time_place_summary">
+    <p>
         Time/Place summary: {{ data.date_display }} - {% if data.location %}{{ data.location }} {% else %} <span class="not_provided">location not-provided</span> {% endif %}
     </p>
 
-    <p id="description">
+    <p>
         Description: {{ data.description }}
     </p>
 
     <hr/>
 
+    <!---------->
+
     <h2>Location</h2>
 
-    <p id="place">
+    <p>
         Place : {% if data.location %}{{ data.location }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
     </p>
 
-    <p id="coordinates">
+    <p>
         Coordinates (lat, lng): ( {{ data.latitude }}, {{ data.longitude }} )
     </p>
 
-    <p id="rationale">
+    <p>
         Rationale: {{ data.locationRationale }}
     </p>
 
     <hr/>
+
+    <!---------->
 
     <h2 id="victims">Victims</h2>
 
@@ -90,22 +94,80 @@ Mapping Violence Entry
         </tbody>
     </table>
 
-    <p id="rationale">
+    <p>
         Number of victims: {% if data.number_of_victims %}{{ data.number_of_victims }} {% else %} {{ data.victims|length }} above {% endif %}
     </p>
 
-    <p id="rationale">
+    <p>
         Victims Category: {% if data.victims_category %}{{ data.victims_category }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
     </p>
 
     <h2 id="aggressors">Aggressors</h2>
 
-    <p>--> HERE <--</p>
+    <p>
+        {% if data.aggressors %}{{ data.s|join:" , " }} {% else %} <span class="not_provided">aggressors not-provided</span> {% endif %}
+    </p>
 
+    <p>
+        Aggressors category: {% if data.aggressorCategory %}{{ data.aggressorCategory|join:" , " }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
 
     <hr/>
 
+    <!---------->
 
+    <h2 id="metadata">Metadata</h2>
+
+    <p>
+        Women involved: {% if data.SOMETHING %}{{ data.SOMETHING|join:" , " }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
+
+    <p>
+        Types of violence: {% if data.typesOfViolence %}{{ data.typesOfViolence|join:" , " }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
+
+    <p>
+        Case Outcome Type: {% if data.SOMETHING %}{{ data.SOMETHING|join:" , " }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
+
+    <p>
+        Case Outcome Subtypes: {% if data.SOMETHING %}{{ data.SOMETHING|join:" , " }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
+
+    <p>
+        Alleged Crime(s): {% if data.allegedCrime %}{{ data.allegedCrime|join:" , " }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
+
+    <p>
+        Available Records: {% if data.SOMETHING %}{{ data.SOMETHING|join:" , " }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
+
+    <hr/>
+
+    <!---------->
+
+    <h2 id="sources">Sources</h2>
+
+    <p>
+        Primary Sources: {% if data.primarySources %}{{ data.primarySources|join:" , " }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
+
+    <p>
+        Secondary Sources: {% if data.secondarySources %}{{ data.secondarySources|join:" , " }} {% else %} <span class="not_provided">not-provided</span> {% endif %}
+    </p>
+
+    <hr/>
+
+    <!---------->
+
+    <h2 id="researcher_notes">Researcher Notes</h2>
+
+    <p>
+        {% if data.SOMETHING %}{{ data.SHOMETHING }}{% else %}(none){% endif %}
+    </p>
+
+
+    <hr/>
 
 
     <div class="data-pool">
