@@ -30,6 +30,15 @@ class RootUrlTest( TestCase ):
     # end class RootUrlTest()
 
 
+class ApiTest( TestCase ):
+    """ Checks auth access to APIs. """
+
+    def test_query_documents(self):
+        """ Checks auth-access. """
+        response =self.client.get( '/api/entries/' )
+        self.assertEqual( 401, response.status_code )
+
+
 # class EntryTest( TestCase ):
 #     """ Checks entry-data construction. """
 

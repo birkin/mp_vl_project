@@ -17,6 +17,9 @@ ENTRY_URL = os.environ['MV_DJ__ENTRY_URL']
 ENTRY_VERSION_URL = os.environ['MV_DJ__ENTRY_VERSION_URL']
 NEW_ENTRY_URL = os.environ['MV_DJ__NEW_ENTRY_URL']
 
+## basic-auth
+BASIC_AUTH_DICT = json.loads( os.environ['MV_DJ__API_AUTH_JSON'] )
+
 ## mongo
 DB_HOST = os.environ['MV_DJ__MONGO_HOST']
 DB_PORT =  os.environ['MV_DJ__MONGO_PORT']

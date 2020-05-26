@@ -6,7 +6,7 @@ import django, pymongo
 from django.conf import settings as project_settings
 from django.contrib.auth import logout as django_logout
 from django.core.handlers import wsgi  # just for type-annotation
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse  # was `from django.core.urlresolvers import reverse` -- deprecated
 from mp_vl_app import settings_app
@@ -103,11 +103,26 @@ def api_entries( request ):
     """ Returns json for entries.
         Currently used by views.db_list() """
     log.debug( '\n\nstarting api_entries()' )
+    from mp_vl_app.lib import basic_auth
+    valid_call: bool = basic_auth.check_basic_auth( request )
+    if not valid_call:
+        log.debug( 'returning `BadRequest` response' )
+        return HttpResponseBadRequest( '400 / Bad Request' )
     connect_str = mongo_access.prep_connect_str( request )
     entries_query = mongo_access.query_entries( connect_str )  # probable TODO: instantiate the helper and save the connect-string as an instance-attribute.
     entries_jsn = views_api_entries_helper.massage_docs( entries_query )
     log.debug( 'returning entries_jsn response' )
     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
+
+# def api_entries( request ):
+#     """ Returns json for entries.
+#         Currently used by views.db_list() """
+#     log.debug( '\n\nstarting api_entries()' )
+#     connect_str = mongo_access.prep_connect_str( request )
+#     entries_query = mongo_access.query_entries( connect_str )  # probable TODO: instantiate the helper and save the connect-string as an instance-attribute.
+#     entries_jsn = views_api_entries_helper.massage_docs( entries_query )
+#     log.debug( 'returning entries_jsn response' )
+#     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
 
 
 def api_entry( request, id ):
