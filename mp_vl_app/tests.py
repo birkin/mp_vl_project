@@ -3,6 +3,7 @@
 import base64, json, logging
 
 from django.test import TestCase
+from django.test.utils import override_settings
 from mp_vl_app import settings_app
 
 
@@ -28,8 +29,6 @@ class RootUrlTest( TestCase ):
         redirect_url = response._headers['location'][1]
         self.assertEqual(  '/info/', redirect_url )
 
-    # end class RootUrlTest()
-
 
 class ApiTest( TestCase ):
     """ Checks auth access to APIs. """
@@ -40,6 +39,7 @@ class ApiTest( TestCase ):
         bad_request = 400
         self.assertEqual( bad_request, response.status_code )
 
+    @override_settings(DEBUG=True)
     def test_list_authorized(self):
         """ Checks entries auth-attempt. """
         localhost_credentials: dict = settings_app.BASIC_AUTH_DICT['ip_127.0.0.1']
@@ -55,7 +55,7 @@ class ApiTest( TestCase ):
         bad_request = 400
         self.assertEqual( bad_request, response.status_code )
 
-
+    @override_settings(DEBUG=True)
     def test_entry_authorized(self):
         """ Checks entry authorized attempt. """
         localhost_credentials: dict = settings_app.BASIC_AUTH_DICT['ip_127.0.0.1']
@@ -63,8 +63,7 @@ class ApiTest( TestCase ):
         credentials = base64.b64encode( credentials_string.encode() )
         self.client.defaults['HTTP_AUTHORIZATION'] = 'Basic ' + credentials.decode()
         response =self.client.get( '/api/entry/5a56745008813b00015f746d/' )
-        self.assertEqual( 999, response.status_code )
-
+        self.assertEqual( 200, response.status_code )
 
 
 # class EntryTest( TestCase ):

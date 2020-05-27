@@ -10,6 +10,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedire
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse  # was `from django.core.urlresolvers import reverse` -- deprecated
 from mp_vl_app import settings_app
+from mp_vl_app.lib import basic_auth
 from mp_vl_app.lib import mongo_access
 from mp_vl_app.lib import views_dblist_helper, views_api_entries_helper
 from mp_vl_app.lib import views_entry_helper
@@ -103,7 +104,6 @@ def api_entries( request ):
     """ Returns json for entries.
         Currently used by views.db_list() """
     log.debug( '\n\nstarting api_entries()' )
-    from mp_vl_app.lib import basic_auth
     valid_call: bool = basic_auth.check_basic_auth( request )
     if not valid_call:
         log.debug( 'returning `BadRequest` response' )
@@ -114,22 +114,16 @@ def api_entries( request ):
     log.debug( 'returning entries_jsn response' )
     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
 
-# def api_entries( request ):
-#     """ Returns json for entries.
-#         Currently used by views.db_list() """
-#     log.debug( '\n\nstarting api_entries()' )
-#     connect_str = mongo_access.prep_connect_str( request )
-#     entries_query = mongo_access.query_entries( connect_str )  # probable TODO: instantiate the helper and save the connect-string as an instance-attribute.
-#     entries_jsn = views_api_entries_helper.massage_docs( entries_query )
-#     log.debug( 'returning entries_jsn response' )
-#     return HttpResponse( entries_jsn, content_type='application/json; charset=utf-8' )
-
 
 def api_entry( request, id ):
     """ Returns json for given entry.
         Called by views.entry() """
     try:
         log.debug( '\n\nstarting api_entry()' )
+        valid_call: bool = basic_auth.check_basic_auth( request )
+        if not valid_call:
+            log.debug( 'returning `BadRequest` response' )
+            return HttpResponseBadRequest( '400 / Bad Request' )
         doc: dict = mongo_access.query_entry( id, request )
         massaged_doc: dict = views_api_entries_helper.massage_doc_data( doc )
         log.debug( f'massaged_doc, ```{pprint.pformat(massaged_doc)}```' )
@@ -139,18 +133,6 @@ def api_entry( request, id ):
     except:
         log.exception( 'problem with api_entry()' )
     return HttpResponse( entry_jsn, content_type='application/json; charset=utf-8' )
-
-
-# @shib_login
-# def api_entry( request, id ):
-#     """ Returns json for given entry.
-#         Called by views.entry() """
-#     log.debug( '\n\nstarting api_entry()' )
-#     entry_query = mongo_access.query_entry( id, request )
-#     entry_jsn = views_api_entry_helper.massage_doc( entry_query )
-#     # entry_jsn = json.dumps( { 'foo': 'bar' } )
-#     log.debug( 'returning entry_jsn response' )
-#     return HttpResponse( entry_jsn, content_type='application/json; charset=utf-8' )
 
 
 # ===========================

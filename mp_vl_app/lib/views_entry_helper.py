@@ -18,10 +18,15 @@ def build_get_data( id: str, scheme: str, host: str, user: django.utils.function
     log.debug( f'host, `{host}`' )
     api_url = f'{scheme}://{host}{reverse( "api_entry_url", kwargs={"id":id} )}'
     log.debug( f'api_url, ```{api_url}```' )
-    r = requests.get( api_url, timeout=10 )
-    raw_data: List(dict) = r.json()
+
+    raw_data = {}
+    credentials: dict = get_credentials()
+    if credentials:
+        r = requests.get( api_url, auth=(credentials['ba_identity'], credentials['ba_password']), verify=True, timeout=10 )
+        if r.status_code == 200:
+            raw_data: List(dict) = r.json()
     context = { 'data': raw_data }
-    # context = { 'db_data': raw_data, 'data': process_data(raw_data) }
+
     username = None
     if user.is_authenticated:  # `user` becomes `django.contrib.auth.models.User` or `...AnonymousUser`
         username: str = user.first_name
@@ -37,16 +42,17 @@ def build_get_data( id: str, scheme: str, host: str, user: django.utils.function
     return context
 
 
-# def process_data( raw_data: list ):
-#     """ Updates db data.
-#         Called by build_get_data() """
-#     log.debug( f'raw_data, ``{pprint.pformat(raw_data)}``' )
-#     data = raw_data.copy()
-#     summary_data = 'summary-line unavailable'
-#     if data.get( 'entryCategory' ) != None:
-#         summary_data = data['entryCategory']
-#     else:
-#         summary_data = data.get( 'date_display' )
-#     data['summary_first_line'] = summary_data
-#     log.debug( f'processed-data, ``{pprint.pformat(data)}``' )
-#     return data
+def get_credentials() -> dict:
+    """ Gets the ip-auth-key for the api call.
+        Called by build_data() """
+    credentials = {}
+    try:
+        hostname = socket.gethostname()
+        ip = socket.gethostbyname( hostname )
+        log.debug( f'ip, ``{ip}``' )
+        auth_key = f'ip_{ip}'
+        credentials: dict = settings_app.BASIC_AUTH_DICT[ auth_key ]
+    except:
+        log.exception( 'problem determining credentials; returning empty {}' )
+    log.debug( f'credentials, ``{credentials}``' )
+    return credentials

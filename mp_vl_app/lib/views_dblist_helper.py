@@ -61,5 +61,3 @@ def get_credentials() -> dict:
         log.exception( 'problem determining credentials; returning empty {}' )
     log.debug( f'credentials, ``{credentials}``' )
     return credentials
-
-

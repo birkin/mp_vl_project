@@ -11,15 +11,17 @@ log = logging.getLogger(__name__)
 def prep_connect_str( request ) -> str:
     """ Preps connect string for localdev and servers.
         Called by views.api_entries() """
+    log.debug( f'host, ``{request.META.get("HTTP_HOST", "127.0.0.1")[0:9]}``' )
     if project_settings.DEBUG == True and request.META.get('HTTP_HOST', '127.0.0.1')[0:9] == '127.0.0.1':
         connect_str = f'mongodb://{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
+        log.debug( f'localhost connect_str, ``{connect_str}``' )
     else:
         username = urllib.parse.quote_plus( settings_app.DB_USER )
         password = urllib.parse.quote_plus( settings_app.DB_PASS )
         connect_str_init = f'mongodb://{username}:{password}@{settings_app.DB_HOST}:{settings_app.DB_PORT}/'
-        log.debug( f'connect_str_init, ```{connect_str_init}```' )
-        connect_str = f'{connect_str_init}?authSource={settings_app.DB_NAME}'
-    log.debug( f'prepared connect_str, ```{connect_str}```' )
+        log.debug( f'non-localhost connect_str_init, ``{connect_str_init}``' )
+        connect_str = f'non-localhost final connect_str, ``{connect_str_init}?authSource={settings_app.DB_NAME}``'
+    log.debug( f'prepared connect_str, ``{connect_str}``' )
     return connect_str
 
 
@@ -63,34 +65,9 @@ def query_entry( id: str, request ) -> dict:  # could be {}
             break
     except:
         log.exception( 'problem accessing mongo' )
-        raise Exception( 'failure' )
+        raise Exception( 'failure accessing entry' )
     log.debug( f'doc, ```{pprint.pformat(doc)}```' )
     return doc
-
-
-# def query_entry( id: str, request ) -> pymongo.cursor.Cursor:  # or None
-#     """ Returns entry.
-#         Called by views.api_entry(), accessed by views.entry() """
-#     log.debug( 'starting query_entry' )
-#     connect_str: str = prep_connect_str( request )
-#     entry_query = None
-#     log.debug( 'starting try' )
-#     try:
-#         m_client: pymongo.mongo_client.MongoClient = pymongo.MongoClient( connect_str )
-#         m_db: pymongo.database.Database = m_client[settings_app.DB_NAME]
-#         m_collection: pymongo.collection.Collection = m_db[settings_app.DB_ENTRIES]
-#         q = { '_id': ObjectId( id ) }
-#         # q = { 'latitude': 26.492979 }
-#         entry_query: pymongo.cursor.Cursor = m_collection.find( q )  # the cursor will return all entries when accessed
-#         ## temp
-#         log.debug( 'about to start loop' )
-#         for doc in entry_query:
-#             log.debug( f'doc, ```{doc}```' )
-#     except:
-#         log.exception( 'problem accessing mongo' )
-#         raise Exception( 'failure' )
-#     log.debug( f'entry_query, ```{pprint.pformat(entry_query.__dict__)}```' )
-#     return entry_query
 
 
 # ----------------------------------
