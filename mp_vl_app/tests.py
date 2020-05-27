@@ -34,20 +34,36 @@ class RootUrlTest( TestCase ):
 class ApiTest( TestCase ):
     """ Checks auth access to APIs. """
 
-    def test_unauthorized(self):
-        """ Checks no-auth attempt. """
+    def test_list_unauthorized(self):
+        """ Checks entries no-auth attempt. """
         response =self.client.get( '/api/entries/' )
         bad_request = 400
         self.assertEqual( bad_request, response.status_code )
 
-    def test_authorized(self):
-        """ Checks auth-attempt. """
+    def test_list_authorized(self):
+        """ Checks entries auth-attempt. """
         localhost_credentials: dict = settings_app.BASIC_AUTH_DICT['ip_127.0.0.1']
         credentials_string = '%s:%s' % ( localhost_credentials['ba_identity'], localhost_credentials['ba_password'] )
         credentials = base64.b64encode( credentials_string.encode() )
         self.client.defaults['HTTP_AUTHORIZATION'] = 'Basic ' + credentials.decode()
         response =self.client.get( '/api/entries/' )
         self.assertEqual( 200, response.status_code )
+
+    def test_entry_unauthorized(self):
+        """ Checks entry no-auth attempt. """
+        response =self.client.get( '/api/entry/5a56745008813b00015f746d/' )
+        bad_request = 400
+        self.assertEqual( bad_request, response.status_code )
+
+
+    def test_entry_authorized(self):
+        """ Checks entry authorized attempt. """
+        localhost_credentials: dict = settings_app.BASIC_AUTH_DICT['ip_127.0.0.1']
+        credentials_string = '%s:%s' % ( localhost_credentials['ba_identity'], localhost_credentials['ba_password'] )
+        credentials = base64.b64encode( credentials_string.encode() )
+        self.client.defaults['HTTP_AUTHORIZATION'] = 'Basic ' + credentials.decode()
+        response =self.client.get( '/api/entry/5a56745008813b00015f746d/' )
+        self.assertEqual( 999, response.status_code )
 
 
 
