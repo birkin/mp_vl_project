@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 def check_basic_auth( request ) -> bool:
     """ Checks for any, and correct, http-basic-auth info, returns boolean.
         Called by views.try_again() """
-    log.debug( 'request.__dict__, ```%s```' % pprint.pformat(request.__dict__) )
+    # log.debug( 'request.__dict__, ```%s```' % pprint.pformat(request.__dict__) )
     basic_auth_ok = False
     auth_info = request.META.get( 'HTTP_AUTHORIZATION', None )
     log.debug( 'type(auth_info), `%s`; auth_info, ```%s```' % (type(auth_info), auth_info) )
@@ -33,22 +33,6 @@ def check_basic_auth( request ) -> bool:
             log.warning( 'dct_key, ``{}`` not found in settings_app.BASIC_AUTH_DICT' )
     log.debug( 'basic_auth_ok, `%s`' % basic_auth_ok )
     return basic_auth_ok
-
-
-# def check_basic_auth( request ):
-#     """ Checks for any, and correct, http-basic-auth info, returns boolean.
-#         Called by views.try_again() """
-#     basic_auth_ok = False
-#     auth_info = request.META.get( 'HTTP_AUTHORIZATION', None )
-#     if ( auth_info and auth_info.startswith('Basic ') ):
-#         basic_info = auth_info.lstrip( 'Basic ' )
-#         decoded_basic_bytes = base64.b64decode( basic_info )  # yes, bytes not str
-#         decoded_basic_str = decoded_basic_bytes.decode( 'utf-8' )
-#         ( received_username, received_password ) = decoded_basic_str.rsplit( ':', 1 )   # cool; 'rsplit-1' solves problem if 'username' contains one or more colons
-#         if received_username == settings_app.BASIC_AUTH_USER and received_password == settings_app.BASIC_AUTH_PASSWORD:
-#             basic_auth_ok = True
-#     log.debug( 'basic_auth_ok, `%s`' % basic_auth_ok )
-#     return basic_auth_ok
 
 
 def display_prompt():
