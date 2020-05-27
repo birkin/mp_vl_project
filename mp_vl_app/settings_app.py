@@ -18,6 +18,7 @@ ENTRY_VERSION_URL = os.environ['MV_DJ__ENTRY_VERSION_URL']
 NEW_ENTRY_URL = os.environ['MV_DJ__NEW_ENTRY_URL']
 
 ## basic-auth
+# LEGIT_AGENTS = json.loads( os.environ['MV_DJ__LEGIT_USER_AGENTS'] )
 BASIC_AUTH_DICT = json.loads( os.environ['MV_DJ__API_AUTH_JSON'] )
 
 ## mongo

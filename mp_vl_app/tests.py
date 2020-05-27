@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import json, logging
+import base64, json, logging
 
 from django.test import TestCase
+from mp_vl_app import settings_app
 
 
 log = logging.getLogger(__name__)
@@ -33,10 +34,21 @@ class RootUrlTest( TestCase ):
 class ApiTest( TestCase ):
     """ Checks auth access to APIs. """
 
-    def test_query_documents(self):
-        """ Checks auth-access. """
+    def test_unauthorized(self):
+        """ Checks no-auth attempt. """
         response =self.client.get( '/api/entries/' )
-        self.assertEqual( 401, response.status_code )
+        bad_request = 400
+        self.assertEqual( bad_request, response.status_code )
+
+    def test_authorized(self):
+        """ Checks auth-attempt. """
+        localhost_credentials: dict = settings_app.BASIC_AUTH_DICT['ip_127.0.0.1']
+        credentials_string = '%s:%s' % ( localhost_credentials['ba_identity'], localhost_credentials['ba_password'] )
+        credentials = base64.b64encode( credentials_string.encode() )
+        self.client.defaults['HTTP_AUTHORIZATION'] = 'Basic ' + credentials.decode()
+        response =self.client.get( '/api/entries/' )
+        self.assertEqual( 200, response.status_code )
+
 
 
 # class EntryTest( TestCase ):
